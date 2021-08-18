@@ -11,6 +11,8 @@ class Server {
         this.port=process.env.PORT;
         this.server=http.createServer(this.app);
         this.auth = '/api/auth';
+        this.curso = '/api/curso';
+        this.asignatura = '/api/asignatura';
         dbConection();
     }
 
@@ -19,6 +21,8 @@ class Server {
         this.app.use(express.json());
         this.app.use(cors());
         this.app.use(this.auth,require('../routes/auth'));
+        this.app.use(this.curso,require('../routes/curso'));
+        this.app.use(this.asignatura,require('../routes/asignatura'));
        
     }
 
