@@ -59,7 +59,19 @@ const register = async(req, res=response) => {
     }
 }
 
+const renewJWT = async(req, res = response)=>{
+    
+    const usuario = req.usuario;
+    const token = await generarJWT(usuario._id, usuario.email);
+    res.status(200).json({
+        ok:true,
+        usuario,
+        token
+    });
+}
+
 module.exports = {
     login,
-    register
+    register,
+    renewJWT
 }

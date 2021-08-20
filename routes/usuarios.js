@@ -6,6 +6,7 @@
 const {Router} = require('express');
 const { check } = require('express-validator');
 const { getUsuarios, newUsuario, editUsuario, deleteUsuario } = require('../controllers/usuarios');
+const { customRol } = require('../custom/custom-rol');
 const validarCampos = require('../middlewares/validarcampos');
 const validarJWT = require('../middlewares/validarjwt');
 
@@ -25,6 +26,7 @@ router.put('/:id',[
     check('password','El password es requerido').not().isEmpty(),
     check('usuario','El usuario es requerido').not().isEmpty(),
     check('id','El id no es valido').isMongoId(),
+    check('role').custom(customRol),
     validarJWT,
     validarCampos
 ], editUsuario);
