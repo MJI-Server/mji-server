@@ -13,6 +13,8 @@ class Server {
         this.auth = '/api/auth';
         this.curso = '/api/curso';
         this.asignatura = '/api/asignatura';
+        this.unidad = '/api/unidad';
+        this.oa = '/api/oa';
         this.usuarios = '/api/usuarios';
         dbConection();
     }
@@ -24,6 +26,8 @@ class Server {
         this.app.use(this.auth,require('../routes/auth'));
         this.app.use(this.curso,require('../routes/curso'));
         this.app.use(this.asignatura,require('../routes/asignatura'));
+        this.app.use(this.unidad,require('../routes/unidad'));
+        this.app.use(this.oa,require('../routes/oa'));
         this.app.use(this.usuarios,require('../routes/usuarios'));
        
     }

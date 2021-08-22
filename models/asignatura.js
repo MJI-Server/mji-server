@@ -12,7 +12,7 @@ const asignaturaSchema = Schema({
     },
     unidades : [{
         type : Schema.Types.ObjectId,
-        ref : 'Unidades',
+        ref : 'Unidad',
     }],
     status: {
         type: Boolean,
