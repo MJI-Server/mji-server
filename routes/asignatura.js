@@ -7,28 +7,37 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 const validarCampos = require('../middlewares/validarcampos');
 
-const { getAsignatura, crearAsignatura, actulizarAsignatura, eliminarAsignatura } = require('../controllers/asignatura');
+const { crearAsignatura, actulizarAsignatura, eliminarAsignatura, getAsignaturas } = require('../controllers/asignatura');
+const validarJWT = require('../middlewares/validarjwt');
+const validarRoles = require('../middlewares/validar-rol');
 
 const router = Router();
 
-router.get('/', getAsignatura );
-
+router.get('/', [
+    validarJWT
+], getAsignaturas);
 router.post('/', [
     check('idCurso', 'El id del curso no es válido').isMongoId(),
     check('asignatura','La asignatura es requerida').not().isEmpty(),
-    validarCampos
+    validarJWT,
+    validarRoles('ADMINISTRADOR'),
+    validarCampos,  
 ], crearAsignatura);
 
 router.put('/:id', [
     check('idCurso', 'El id del curso no es válido').isMongoId(),
     check('asignatura','La asignatura es requerida').not().isEmpty(),
     check('id','El id no es válido').isMongoId(),
+    validarJWT,
+    validarRoles('ADMINISTRADOR'),
     validarCampos
 ], actulizarAsignatura);
 
 router.delete('/:id', [
     check('id','El id no es válido').isMongoId(),
-    validarCampos
+    validarJWT,
+    validarRoles('ADMINISTRADOR'),
+    validarCampos,
 ], eliminarAsignatura);
 
 module.exports = router;

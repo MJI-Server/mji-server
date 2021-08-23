@@ -29,7 +29,7 @@ const crearCurso = async ( req, res = response ) => {
         
         const cursoGuardado = await curso.save();
 
-        res.status(201).json({
+        res.status(200).json({
             ok: true,
             curso: cursoGuardado
         })
@@ -52,7 +52,7 @@ const actualizarCurso = async ( req, res = response ) => {
         
         const curso = await Curso.findById( cursoID );
 
-        if( !curso ){
+        if( !curso || curso.status===false ){
             return res.status(404).json({
                 ok: false,
                 msg: 'Curso no existe por ese id'
@@ -88,7 +88,7 @@ const eliminarCurso = async ( req, res = response ) => {
         
         const curso = await Curso.findById( cursoID );
 
-        if ( !curso ) {
+        if ( !curso || curso.status === false ) {
             return res.status(404).json({
                 ok: false,
                 msg: 'El Curso no existe por ese id'
@@ -99,7 +99,7 @@ const eliminarCurso = async ( req, res = response ) => {
 
         await curso.save();
 
-        res.json({
+        res.status(200).json({
             ok: true,
             msg: 'El curso se ha eliminado con éxito'
         })

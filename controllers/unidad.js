@@ -1,15 +1,16 @@
 const { response } = require('express');
+const Asignatura = require('../models/asignatura');
 const Unidad = require('../models/unidad');
 
 const getUnidades = async ( req, res =  response ) => {
     
-    const unidad = await Unidad.find();
-
+    
     try {
         
+        const unidades = await Unidad.find();
         res.status(200).json({
             ok : true,
-            unidad
+            unidades
         })
 
     } catch (error) {
@@ -26,14 +27,24 @@ const getUnidades = async ( req, res =  response ) => {
 const createUnidades = async ( req, res =  response ) => {
 
     const unidad = new Unidad( req.body )
+    const {idAsignatura} = req.body;
 
     try {
+        const asignatura = await Asignatura.findById(idAsignatura);
+        if(!asignatura){
+            return res.status(401).json({
+                ok:false,
+                msg:'La asignatura no existe'
+            });
+        };
+        await unidad.save();
+        asignatura.unidades = [...asignatura.unidades, unidad._id];
+        await asignatura.save();
         
-        const unidadSaved = await unidad.save();
 
-        res.status(201).json({
+        res.status(200).json({
             ok: true,
-            unidad: unidadSaved
+            unidad
         })
 
     } catch (error) {
@@ -71,7 +82,7 @@ const updatetUnidades = async ( req, res =  response ) => {
 
         const unidadUpdated = await Unidad.findByIdAndUpdate( unidadID, newUnidad, { new : true } );
 
-        res.json({
+        res.status(200).json({
             ok: true,
             unidad: unidadUpdated
         })
@@ -98,6 +109,14 @@ const deleteUnidades = async ( req, res =  response ) => {
             return res.status(404).json({
                 ok: false,
                 msg: 'Unidad no existe por ese id'
+            });
+    
+        }
+        if ( unidad.status === false ) {
+
+            return res.status(404).json({
+                ok: false,
+                msg: 'La unidad ya ha sido dada de baja'
             });
     
         }

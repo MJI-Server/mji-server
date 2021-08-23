@@ -5,7 +5,7 @@ const cursoSchema = Schema({
         type: String,
         required: true
     },
-    asignatura: [{
+    asignaturas: [{
         type: Schema.Types.ObjectId,
         ref: 'Asignatura'
     }],
@@ -15,7 +15,7 @@ const cursoSchema = Schema({
     },
     status: {
         type: Boolean,
-        default: true
+        default: false
     }
 });
 

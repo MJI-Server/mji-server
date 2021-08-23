@@ -1,15 +1,16 @@
 const { response } = require('express');
 const OA = require('../models/oa');
+const Unidad = require('../models/unidad');
 
 const getOA = async ( req, res = response ) => {
     
-    const oa = await OA.find();
-
+    
     try {
+        const oas = await OA.find();
         
         res.status(200).json({
             ok : true,
-            oa
+            oas
         })
 
     } catch (error) {
@@ -26,14 +27,23 @@ const getOA = async ( req, res = response ) => {
 const createOA = async ( req, res = response ) => {
 
     const oa = new OA( req.body );
+    const {idUnidad} = req.body;
 
     try {
-        
-        const oaSaved = await oa.save();
+        const unidad = await Unidad.findById(idUnidad);
+        if(!unidad){
+            return res.status(401).json({
+                ok:false,
+                msg:'La unidad no existe'
+            });
+        }
+        await oa.save();
+        unidad.oas = [...unidad.oas, oa._id];
+        await unidad.save();
 
-        res.status(201).json({
+        res.status(200).json({
             ok: true,
-            oa: oaSaved
+            oa
         })
 
     } catch (error) {
@@ -67,7 +77,7 @@ const updateOA = async ( req, res = response ) => {
 
         const oaUpdated = await OA.findByIdAndUpdate( oaID, newOA, { new: true } );
 
-        res.json({
+        res.status(200).json({
             ok: true,
             oa: oaUpdated
         })
@@ -96,12 +106,18 @@ const deleteOA = async ( req, res = response ) => {
                 msg: 'OA no existe por ese id'
             });
         }
+        if(oa.status === false){
+            return res.status(401).json({
+                ok:false,
+                msg:'El OA ya ha sido dado de baja'
+            });
+        }
 
         oa.status = false;
 
         await oa.save();
 
-        res.json({
+        res.status(200).json({
             ok: true,
             msg: 'El OA se ha eliminado con éxito'
         })

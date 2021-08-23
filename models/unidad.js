@@ -10,7 +10,7 @@ const unidadSchema = new Schema({
         type: String,
         required: true
     },
-    OA: [{
+    oas: [{
         type: Schema.Types.ObjectId,
         ref: 'OA'
     }],
