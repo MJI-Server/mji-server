@@ -52,7 +52,7 @@ const actualizarCurso = async ( req, res = response ) => {
         
         const curso = await Curso.findById( cursoID );
 
-        if( !curso || curso.status===false ){
+        if( !curso ){
             return res.status(404).json({
                 ok: false,
                 msg: 'Curso no existe por ese id'
@@ -88,10 +88,16 @@ const eliminarCurso = async ( req, res = response ) => {
         
         const curso = await Curso.findById( cursoID );
 
-        if ( !curso || curso.status === false ) {
+        if ( !curso ) {
             return res.status(404).json({
                 ok: false,
                 msg: 'El Curso no existe por ese id'
+            });
+        }
+        if ( curso.status === false ) {
+            return res.status(404).json({
+                ok: false,
+                msg: 'El Curso ya ha sido dado de baja'
             });
         }
 

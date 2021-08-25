@@ -86,12 +86,13 @@ const deleteUsuario = async(req,res=response)=>{
                     msg:'El usuario no existe'
                 });
             };
-            verificarUsuario.status = false;
-            await verificarUsuario.save();
+            
+            verificarUsuario.status = !verificarUsuario.status;
+            const usuario = await verificarUsuario.save();
             
             res.status(200).json({
                 ok:true,
-                msg:'Usuario eliminado'
+                usuario
             });
         } catch (error) {
             console.log(error);

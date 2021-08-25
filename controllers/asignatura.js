@@ -31,7 +31,7 @@ const crearAsignatura = async ( req, res = response ) => {
 
     try {
         const curso = await Curso.findById(idCurso);
-        if(!curso || curso.status === false){
+        if(!curso ){
             res.status(401).json({
                 ok:false,
                 msg:'No existe curso'

@@ -25,10 +25,8 @@ router.post('/',[
 ], newUsuario);
 router.put('/:id',[
     check('email','Ingrese un mail valido').isEmail(),
-    check('password','El password es requerido').not().isEmpty(),
     check('usuario','El usuario es requerido').not().isEmpty(),
     check('id','El id no es valido').isMongoId(),
-    check('role').custom(customRol),
     validarJWT,
     validarRoles('ADMINISTRADOR'),
     validarCampos
