@@ -106,20 +106,15 @@ const deleteOA = async ( req, res = response ) => {
                 msg: 'OA no existe por ese id'
             });
         }
-        if(oa.status === false){
-            return res.status(401).json({
-                ok:false,
-                msg:'El OA ya ha sido dado de baja'
-            });
-        }
+      
 
-        oa.status = false;
+        oa.status = !oa.status ;
 
         await oa.save();
 
         res.status(200).json({
             ok: true,
-            msg: 'El OA se ha eliminado con éxito'
+            oa
         })
 
     } catch (error) {

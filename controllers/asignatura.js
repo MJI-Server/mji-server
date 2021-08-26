@@ -106,25 +106,19 @@ const eliminarAsignatura = async ( req, res = response ) => {
 
             return res.status(404).json({
                 ok: false,
-                msg: 'La asignatura no existe o no esta disponible'
-            });
-        }
-        if ( asignatura.status === false ) {
-
-            return res.status(404).json({
-                ok: false,
-                msg: 'La asignatura ya esta dada de baja'
+                msg: 'La asignatura no existe'
             });
         }
         
+        
 
-        asignatura.status = false;
+        asignatura.status = !asignatura.status;
 
         await asignatura.save();
 
         res.status(200).json({
             ok: true,
-            msg: 'La asignatura se ha eliminado con éxito'
+            asignatura
         })
 
     } catch (error) {

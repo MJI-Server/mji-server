@@ -112,22 +112,15 @@ const deleteUnidades = async ( req, res =  response ) => {
             });
     
         }
-        if ( unidad.status === false ) {
+        
 
-            return res.status(404).json({
-                ok: false,
-                msg: 'La unidad ya ha sido dada de baja'
-            });
-    
-        }
-
-        unidad.status = false;
+        unidad.status = !unidad.status;
 
         await unidad.save();
 
         res.json({
             ok: true,
-            msg: 'La unidad se ha eliminado con éxito'
+            unidad
         })
 
     } catch (error) {

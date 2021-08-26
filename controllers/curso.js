@@ -94,20 +94,15 @@ const eliminarCurso = async ( req, res = response ) => {
                 msg: 'El Curso no existe por ese id'
             });
         }
-        if ( curso.status === false ) {
-            return res.status(404).json({
-                ok: false,
-                msg: 'El Curso ya ha sido dado de baja'
-            });
-        }
+      
 
-        curso.status = false;
+        curso.status = !curso.status;
 
         await curso.save();
 
         res.status(200).json({
             ok: true,
-            msg: 'El curso se ha eliminado con éxito'
+            curso
         })
 
     } catch (error) {
