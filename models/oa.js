@@ -3,7 +3,8 @@ const {model, Schema} = require('mongoose');
 const oaSchema = new Schema({
     idUnidad: {
         type: Schema.Types.ObjectId,
-        ref: 'Unidad'
+        ref: 'Unidad',
+        required: true
     },
     oa: {
         type: String,
