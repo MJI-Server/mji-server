@@ -16,6 +16,7 @@ class Server {
         this.unidad = '/api/unidad';
         this.oa = '/api/oa';
         this.usuarios = '/api/usuarios';
+        this.colegio = '/api/colegio';
         dbConection();
     }
 
@@ -29,6 +30,7 @@ class Server {
         this.app.use(this.unidad,require('../routes/unidad'));
         this.app.use(this.oa,require('../routes/oa'));
         this.app.use(this.usuarios,require('../routes/usuarios'));
+        this.app.use(this.colegio,require('../routes/colegio'));
        
     }
 
