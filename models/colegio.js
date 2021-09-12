@@ -5,9 +5,13 @@ const colegioSchema = Schema({
         type: String,
         required: true
     },
-    nombre: [{
+    nombre: {
         type: String,
         required:true
+    },
+    cursos:[{
+        type:Schema.Types.ObjectId,
+        ref:'Curso'
     }],
     status: {
         type: Boolean,
