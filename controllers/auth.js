@@ -2,9 +2,12 @@ const { response } = require("express");
 const Usuario = require("../models/usuario");
 const bcrypt = require('bcryptjs');
 const { generarJWT } = require("../helpers/jwt");
+const dbConection = require("../db/dbconection");
 const login = async(req, res=response) => {
     try {
         const {email, password} = req.body;
+        console.log('aqui');
+        await dbConection('ColegioX');
         const usuario = await Usuario.findOne({email});
         if(!usuario || usuario.status === false){
             return res.status(401).json({

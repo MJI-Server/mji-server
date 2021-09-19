@@ -17,7 +17,12 @@ class Server {
         this.oa = '/api/oa';
         this.usuarios = '/api/usuarios';
         this.colegio = '/api/colegio';
-        dbConection();
+        this.asistencia = '/api/asistencia';
+        this.material = '/api/material';
+        this.tareas = '/api/tareas';
+        this.enunciados = '/api/enunciados';
+        this.items = '/api/items';
+ 
     }
 
     middlewares() {
@@ -31,6 +36,11 @@ class Server {
         this.app.use(this.oa,require('../routes/oa'));
         this.app.use(this.usuarios,require('../routes/usuarios'));
         this.app.use(this.colegio,require('../routes/colegio'));
+        this.app.use(this.asistencia,require('../routes/asistencia'));
+        this.app.use(this.material,require('../routes/material'));
+        this.app.use(this.tareas,require('../routes/tarea'));
+        this.app.use(this.enunciados,require('../routes/enunciado'));
+        this.app.use(this.items,require('../routes/item'));
        
     }
 
