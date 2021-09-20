@@ -22,8 +22,10 @@ class Server {
         this.tareas = '/api/tareas';
         this.enunciados = '/api/enunciados';
         this.items = '/api/items';
- 
+        dbConection();
     }
+
+   
 
     middlewares() {
         this.app.use( express.static( path.resolve( __dirname, '../public' ) ) );

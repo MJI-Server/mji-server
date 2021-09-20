@@ -19,7 +19,7 @@ const validarJWT = async(req, res=response, next)=>{
             msg:'El token no es valido'
         });
     };
-    const usuario = await Usuario.findById(uid);
+    const usuario = await Usuario.findById(uid).populate({path:'idCurso', populate:{path:'asignaturas', populate:{path:'unidades',populate:{path:'oas'}}}});
     if(!usuario || usuario.status === false){
         return res.status(401).json({
             ok:false,

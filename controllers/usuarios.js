@@ -53,6 +53,7 @@ const newUsuario = async(req,res=response)=>{
 const editUsuario = async(req,res=response)=>{
     try {
         const id = req.params.id;
+        let {password, ...rest} = req.body;
         const verificarUsuario = await Usuario.findById(id);
         if(!verificarUsuario){
             return res.json({
@@ -60,7 +61,11 @@ const editUsuario = async(req,res=response)=>{
                 msg:'El usuario no existe'
             });
         };
-        const newUsuario = await Usuario.findByIdAndUpdate(id, req.body, {new:true});
+        console.log(rest)
+        const salt = bcrypt.genSaltSync(1);
+        password = bcrypt.hashSync(password,salt);
+        
+        const newUsuario = await Usuario.findByIdAndUpdate(id, {rest,password}, {new:true});
         
         res.status(200).json({
             ok:true,

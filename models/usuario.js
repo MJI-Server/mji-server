@@ -2,6 +2,16 @@ const {model, Schema} = require('mongoose');
 
 
 const UsuarioSchema = new Schema({
+    idCurso:{
+        type:Schema.Types.ObjectId,
+        ref:'Curso',
+        required:false
+    },
+    idColegio:{
+        type:Schema.Types.ObjectId,
+        ref:'Colegio',
+        required:true
+    },
     nombre:{
         type:String,
         required:false
