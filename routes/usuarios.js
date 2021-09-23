@@ -18,7 +18,7 @@ router.get('/',validarJWT, getUsuarios);
 router.post('/',[
     check('email','Ingrese un mail valido').isEmail(),
     check('password','El password es requerido').not().isEmpty(),
-    check('usuario','El usuario es requerido').not().isEmpty(),
+    // check('usuario','El usuario es requerido').not().isEmpty(),
     validarJWT,
     validarRoles('ADMINISTRADOR'),
     validarCampos

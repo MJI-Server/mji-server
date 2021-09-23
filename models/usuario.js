@@ -16,7 +16,15 @@ const UsuarioSchema = new Schema({
         type:String,
         required:false
     },
-    apellido:{
+    apellidoP:{
+        type:String,
+        required:false
+    },
+    apellidoM:{
+        type:String,
+        required:false
+    },
+    run:{
         type:String,
         required:false
     },
@@ -26,11 +34,24 @@ const UsuarioSchema = new Schema({
     },
     email:{
         type:String,
-        required:true
+        required:false
     },
     password:{
         type:String,
         required:true
+    },
+    telefono:{
+        type:String,
+        required:true
+    },
+    direccion:{
+        type:String,
+        required:false
+    },
+    genero:{
+        type:String,
+        required:false,
+        enum:['M','F']
     },
     role:{
         type:String,

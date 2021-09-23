@@ -9,6 +9,10 @@ const cursoSchema = Schema({
         type: Schema.Types.ObjectId,
         ref: 'Asignatura'
     }],
+    grado: {
+        type: String,
+        required: true
+    },
     curso: {
         type: String,
         required: true

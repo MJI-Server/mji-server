@@ -1,6 +1,8 @@
 const Usuario = require("../models/usuario");
 const bcrypt = require('bcryptjs');
 const { response } = require("express");
+const Colegio = require("../models/colegio");
+const Curso = require("../models/curso");
 
 const getUsuarios = async(req,res=response)=>{
     try {
@@ -19,22 +21,33 @@ const getUsuarios = async(req,res=response)=>{
 const newUsuario = async(req,res=response)=>{
     try {
         try {
-            const {email, password} = req.body;
-            const verificarUsuario = await Usuario.findOne({email});
+            const {usuario, password, grado, letra, rbd} = req.body;
+            const colegio = await Colegio.findOne({rbd});
+            const curso = await Curso.findOne({letra,grado});
+            console.log(curso)
+            if(!colegio || !curso){
+                return res.status(404).json({
+                    ok:false,
+                    msg:'El curso o colegio no existe' 
+                })
+            }
+            const verificarUsuario = await Usuario.findOne({usuario});
             if(verificarUsuario){
                 return res.json({
                     ok:false,
-                    msg:'El email ya existe'
+                    msg:'El usuario ya existe'
                 });
             };
-            const usuario = new Usuario(req.body);
+            const user = new Usuario(req.body);
             const salt = bcrypt.genSaltSync(1);
-            usuario.password = bcrypt.hashSync(password,salt);
-          
-            await usuario.save();
+            user.password = bcrypt.hashSync(password,salt);
+            user.idColegio = colegio._id;
+            user.idCurso = curso._id;
+            console.log(colegio);
+            await user.save();
             res.status(200).json({
                 ok:true,
-                usuario,
+                usuario:user,
             });
         } catch (error) {
             console.log(error);
