@@ -26,6 +26,14 @@ const crearCurso = async ( req, res = response ) => {
     const curso = new Curso( req.body );
 
     try {
+        const {grado, letra} = req.body;
+        const verificar =await Curso.findOne({grado, letra});
+        if(verificar){
+            return res.status(404).json({
+                ok:false,
+                msg:'El curso ya existe'
+            });
+        }
         
         const cursoGuardado = await curso.save();
 
@@ -49,6 +57,16 @@ const actualizarCurso = async ( req, res = response ) => {
     const cursoID = req.params.id;
 
     try {
+        const {grado, letra} = req.body;
+        const verificar = await Curso.findOne({grado, letra});
+        const cursoActual = await Curso.findById(cursoID);
+
+        if(verificar._id.toString() !== cursoActual._id.toString()){
+            return res.status(404).json({
+                ok:false,
+                msg:'El curso ya existe'
+            });
+        }
         
         const curso = await Curso.findById( cursoID );
 

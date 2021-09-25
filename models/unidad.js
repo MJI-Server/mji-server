@@ -6,6 +6,23 @@ const unidadSchema = new Schema({
         ref: 'Asignatura',
         required: true
     },
+    codUnidad : {
+        type: String,
+        required: true,
+        unique:true
+    },
+    proposito : {
+        type: String,
+        required: true
+    },
+    conocimientosPrevios : [{
+        type: String,
+        required: true
+    },],
+    palabrasClaves : [{
+        type: String,
+        required: true
+    },],
     unidad : {
         type: String,
         required: true

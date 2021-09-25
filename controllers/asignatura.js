@@ -8,7 +8,7 @@ const getAsignaturas = async ( req, res =  response ) => {
     
     try {
         
-        const asignaturas = await Asignatura.find();
+        const asignaturas = await Asignatura.find().populate('idCurso');
         res.status(200).json({
             ok : true,
             asignaturas
@@ -26,21 +26,34 @@ const getAsignaturas = async ( req, res =  response ) => {
 }
 
 const crearAsignatura = async ( req, res = response ) => {
-    const {idCurso} = req.body;
+    const {grado,asignatura:nombre} = req.body;
     const asignatura = new Asignatura( req.body );
 
     try {
-        const curso = await Curso.findById(idCurso);
+        const verificar = await Asignatura.findOne({grado,asignatura:nombre});
+        const curso = await Curso.findOne({grado});
+        const cursos = await Curso.find({grado});
+        if(verificar ){
+            return res.status(401).json({
+                ok:false,
+                msg:'Ya existe asignatura'
+            });
+        };
         if(!curso ){
-            res.status(401).json({
+            return res.status(401).json({
                 ok:false,
                 msg:'No existe curso'
             });
         };
-        
+        asignatura.idCurso = curso._id;
         await asignatura.save();
-        curso.asignaturas = [...curso.asignaturas, asignatura.id];
-        await curso.save();
+        const promesas = cursos.map(c => {
+            c.asignaturas = [...c.asignaturas, asignatura.id];
+            c.save();
+        });
+        await Promise.all(promesas);
+
+        asignatura.idCurso = curso;
 
         res.status(200).json({
             ok: true,
@@ -78,7 +91,7 @@ const actulizarAsignatura = async ( req, res = response ) => {
             ...req.body
         }
 
-        const asignaturaUpdated = await Asignatura.findByIdAndUpdate( asignaturaID, nuevaAsignatura, { new: true } );
+        const asignaturaUpdated = await Asignatura.findByIdAndUpdate( asignaturaID, nuevaAsignatura, { new: true } ).populate('idCurso');
 
         res.status(200).json({
             ok: true,
@@ -100,7 +113,7 @@ const eliminarAsignatura = async ( req, res = response ) => {
 
     try {
         
-        const asignatura = await Asignatura.findById( asignaturaID );
+        const asignatura = await Asignatura.findById( asignaturaID ).populate('idCurso');
 
         if ( !asignatura ) {
 

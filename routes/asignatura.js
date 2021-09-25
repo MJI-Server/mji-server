@@ -17,7 +17,7 @@ router.get('/', [
     validarJWT
 ], getAsignaturas);
 router.post('/', [
-    check('idCurso', 'El id del curso no es válido').isMongoId(),
+    check('grado', 'El id del curso no es válido').not().isEmpty(),
     check('asignatura','La asignatura es requerida').not().isEmpty(),
     validarJWT,
     validarRoles('ADMINISTRADOR'),
@@ -25,7 +25,7 @@ router.post('/', [
 ], crearAsignatura);
 
 router.put('/:id', [
-    check('idCurso', 'El id del curso no es válido').isMongoId(),
+    // check('idCurso', 'El id del curso no es válido').isMongoId(),
     check('asignatura','La asignatura es requerida').not().isEmpty(),
     check('id','El id no es válido').isMongoId(),
     validarJWT,

@@ -6,6 +6,15 @@ const asignaturaSchema = Schema({
         ref : 'Curso',
         required : true
     },
+    codAsignatura : {
+        type : String,
+        required : true,
+        unique:true
+    },
+    grado : {
+        type : String,
+        required : true
+    },
     asignatura : {
         type : String,
         required : true

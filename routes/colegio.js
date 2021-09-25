@@ -17,7 +17,7 @@ const router = Router();
 router.get('/', getColegios);
 
 router.post('/',[
-    check('rbd','La letra del curso es requerida').not().isEmpty(),
+    check('rbd','El rbd es requerido').not().isEmpty(),
     check('nombre','El nombre del curso es requerido').not().isEmpty(),
     validarJWT,
     validarRoles('ADMINISTRADOR'),

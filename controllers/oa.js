@@ -6,7 +6,7 @@ const getOA = async ( req, res = response ) => {
     
     
     try {
-        const oas = await OA.find();
+        const oas = await OA.find().populate({path:'idUnidad', populate:{path:'idAsignatura', populate:{path:'idCurso'}}});
         
         res.status(200).json({
             ok : true,
@@ -27,19 +27,21 @@ const getOA = async ( req, res = response ) => {
 const createOA = async ( req, res = response ) => {
 
     const oa = new OA( req.body );
-    const {idUnidad} = req.body;
+    const {codUnidad} = req.body;
 
     try {
-        const unidad = await Unidad.findById(idUnidad);
+        const unidad = await Unidad.findOne({codUnidad}).populate({path:'idAsignatura', populate:{path:'idCurso'}});
         if(!unidad){
             return res.status(401).json({
                 ok:false,
                 msg:'La unidad no existe'
             });
         }
+        oa.idUnidad = unidad._id;
         await oa.save();
         unidad.oas = [...unidad.oas, oa._id];
         await unidad.save();
+        oa.idUnidad = unidad;
 
         res.status(200).json({
             ok: true,
@@ -75,7 +77,7 @@ const updateOA = async ( req, res = response ) => {
             ...req.body
         }
 
-        const oaUpdated = await OA.findByIdAndUpdate( oaID, newOA, { new: true } );
+        const oaUpdated = await OA.findByIdAndUpdate( oaID, newOA, { new: true } ).populate('idUnidad').populate({path:'idUnidad', populate:{path:'idAsignatura', populate:{path:'idCurso'}}});
 
         res.status(200).json({
             ok: true,
@@ -98,7 +100,7 @@ const deleteOA = async ( req, res = response ) => {
 
     try {
         
-        const oa = await OA.findById( oaID );
+        const oa = await OA.findById( oaID ).populate('idUnidad').populate({path:'idUnidad', populate:{path:'idAsignatura', populate:{path:'idCurso'}}});
 
         if ( !oa ) {
             return res.status(404).json({

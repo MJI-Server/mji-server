@@ -22,10 +22,18 @@ const getColegios = async ( req, res = response ) => {
 
 const crearColegio = async ( req, res = response ) => {
 
+    const {rbd} = req.body;
     const colegio = new Colegio( req.body );
-
+    
     try {
         
+        const verificar = await Colegio.findOne({rbd});
+        if(verificar){
+            return res.status(404).json({
+                ok:false,
+                msg:'El colegio ya existe'
+            });
+        }
         await colegio.save();
 
         res.status(200).json({

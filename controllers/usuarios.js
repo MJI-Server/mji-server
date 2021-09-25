@@ -20,43 +20,37 @@ const getUsuarios = async(req,res=response)=>{
 }
 const newUsuario = async(req,res=response)=>{
     try {
-        try {
-            const {usuario, password, grado, letra, rbd} = req.body;
-            const colegio = await Colegio.findOne({rbd});
-            const curso = await Curso.findOne({letra,grado});
-            console.log(curso)
-            if(!colegio || !curso){
-                return res.status(404).json({
-                    ok:false,
-                    msg:'El curso o colegio no existe' 
-                })
-            }
-            const verificarUsuario = await Usuario.findOne({usuario});
-            if(verificarUsuario){
-                return res.json({
-                    ok:false,
-                    msg:'El usuario ya existe'
-                });
-            };
-            const user = new Usuario(req.body);
-            const salt = bcrypt.genSaltSync(1);
-            user.password = bcrypt.hashSync(password,salt);
-            user.idColegio = colegio._id;
-            user.idCurso = curso._id;
-            console.log(colegio);
-            await user.save();
-            res.status(200).json({
-                ok:true,
-                usuario:user,
-            });
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({
+        const {usuario, password, grado, letra, rbd} = req.body;
+        const rbdSplit = rbd.split('-')[0];
+        const colegio = await Colegio.findOne({rbd:rbdSplit});
+        const curso = await Curso.findOne({letra,grado});
+        console.log(curso)
+        if(!colegio || !curso){
+            return res.status(404).json({
                 ok:false,
-                msg:'Error del servidor'
-            });
+                msg:'El curso o colegio no existe' 
+            })
         }
+        const verificarUsuario = await Usuario.findOne({usuario});
+        if(verificarUsuario){
+            return res.json({
+                ok:false,
+                msg:'El usuario ya existe'
+            });
+        };
+        const user = new Usuario(req.body);
+        const salt = bcrypt.genSaltSync(1);
+        user.password = bcrypt.hashSync(password,salt);
+        user.idColegio = colegio._id;
+        user.idCurso = curso._id;
+        console.log(colegio);
+        await user.save();
+        res.status(200).json({
+            ok:true,
+            usuario:user,
+        });
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             ok:false,
             msg:'Error del servidor'
