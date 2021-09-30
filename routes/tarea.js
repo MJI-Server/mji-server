@@ -5,14 +5,14 @@
 */
 const {Router} = require('express');
 const { check } = require('express-validator');
-const { isDate } = require('moment');
 const { getTareas, createTarea, updateTarea, deleteTarea } = require('../controllers/tarea');
+const isDate = require('../helpers/isDate');
 const validarCampos = require('../middlewares/validarcampos');
 const validarJWT = require('../middlewares/validarjwt');
 
 const router = Router();
 
-router.get('/',[
+router.post('/getTareas',[
     validarJWT
 ], getTareas);
 

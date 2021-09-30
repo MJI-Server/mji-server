@@ -37,8 +37,9 @@ const createEnunciado = async ( req, res = response ) => {
             })
         }
 
-        await enunciado.save();
         tarea.enunciados = [ ...tarea.enunciados, enunciado.id ];
+        await enunciado.save();
+        await tarea.save();
 
         res.status(201).json({
             ok: true,

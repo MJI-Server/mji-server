@@ -36,8 +36,8 @@ const createItem = async ( req, res = response ) => {
             });
         }
 
-        await item.save();
         enunciado.items = [ ...enunciado.items, item.id ];
+        await item.save();
         await enunciado.save();
 
         res.status(200).json({

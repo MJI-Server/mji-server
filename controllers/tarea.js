@@ -1,11 +1,15 @@
 const Tarea = require("../models/tarea");
 const { response } = require("express");
+const Unidad = require("../models/unidad");
 
 const getTareas = async ( req, res = response ) => {
 
+    const { idUnidad } = req.body;
+
     try {
         
-        const tareas = await Tarea.find();
+        const tareas = await Tarea.find({idUnidad}).populate({path:'enunciados', populate:{path:'items'}});
+        
         res.status(200).json({
             ok: true,
             tareas
@@ -23,8 +27,19 @@ const createTarea = async ( req, res = response ) => {
 
     const tarea = new Tarea( req.body );
 
+    const { idUnidad } = req.body;
+
     try {       
         
+        const unidad = await Unidad.findById( idUnidad );
+
+        if (!unidad) {
+            return res.status(401).json({
+                ok: false,
+                msg: 'La unidad no existe'
+            });
+        }
+
         const tareaSaved = await tarea.save();
 
         res.status(201).json({
