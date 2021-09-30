@@ -1,5 +1,6 @@
 const { response } = require('express');
 const Asignatura = require('../models/asignatura');
+const OA = require('../models/oa');
 const Unidad = require('../models/unidad');
 
 const getUnidades = async ( req, res =  response ) => {
@@ -27,18 +28,32 @@ const getUnidades = async ( req, res =  response ) => {
 const createUnidades = async ( req, res =  response ) => {
 
     const unidad = new Unidad( req.body )
-    const {codAsignatura} = req.body;
+    const {codAsignatura,oas} = req.body;
 
     try {
+        const codigo = oas[0].toString().split('-')[0];
         const asignatura = await Asignatura.findOne({codAsignatura}).populate('idCurso');
+        const oass = await OA.find({codOA: {'$regex': codigo}});
         if(!asignatura){
             return res.status(401).json({
                 ok:false,
                 msg:'La asignatura no existe'
             });
         };
+        let newOas = [];
+        oas.forEach(oa => {
+           
+            oass.forEach(o=>{
+                
+                if(oa === o.codOA){
+                    newOas = [...newOas,o._id];
+                }
+            })
+        })
+        unidad.oas = newOas;
         unidad.idAsignatura = asignatura._id;
         await unidad.save();
+        
         asignatura.unidades = [...asignatura.unidades, unidad._id];
         await asignatura.save();
         

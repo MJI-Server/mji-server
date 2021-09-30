@@ -9,7 +9,6 @@ const asignaturaSchema = Schema({
     codAsignatura : {
         type : String,
         required : true,
-        unique:true
     },
     grado : {
         type : String,

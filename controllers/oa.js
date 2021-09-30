@@ -27,21 +27,10 @@ const getOA = async ( req, res = response ) => {
 const createOA = async ( req, res = response ) => {
 
     const oa = new OA( req.body );
-    const {codUnidad} = req.body;
 
     try {
-        const unidad = await Unidad.findOne({codUnidad}).populate({path:'idAsignatura', populate:{path:'idCurso'}});
-        if(!unidad){
-            return res.status(401).json({
-                ok:false,
-                msg:'La unidad no existe'
-            });
-        }
-        oa.idUnidad = unidad._id;
         await oa.save();
-        unidad.oas = [...unidad.oas, oa._id];
-        await unidad.save();
-        oa.idUnidad = unidad;
+
 
         res.status(200).json({
             ok: true,

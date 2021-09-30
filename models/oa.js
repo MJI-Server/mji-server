@@ -1,9 +1,13 @@
 const {model, Schema} = require('mongoose');
 
 const oaSchema = new Schema({
-    idUnidad: {
-        type: Schema.Types.ObjectId,
-        ref: 'Unidad',
+    
+    codUnidad: {
+        type: String,
+        required: true
+    },
+    codOA: {
+        type: String,
         required: true
     },
     oa: {

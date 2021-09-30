@@ -3,7 +3,7 @@ const Curso = require('../models/curso');
 
 const getCursos = async ( req, res = response ) => {
 
-    const cursos = await Curso.find();
+    const cursos = await Curso.find().populate('asignaturas');
 
     try {
         

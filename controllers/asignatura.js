@@ -45,13 +45,16 @@ const crearAsignatura = async ( req, res = response ) => {
                 msg:'No existe curso'
             });
         };
+        console.log('asignatura')
         asignatura.idCurso = curso._id;
         await asignatura.save();
+        console.log('save asignatura')
         const promesas = cursos.map(c => {
             c.asignaturas = [...c.asignaturas, asignatura.id];
             c.save();
         });
         await Promise.all(promesas);
+        console.log('Promesas')
 
         asignatura.idCurso = curso;
 

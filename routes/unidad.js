@@ -16,7 +16,7 @@ const router = Router();
 router.get('/', getUnidades );
 
 router.post('/', [
-    check('idAsignatura', 'El id de la Asignatura no es válido').isMongoId(),
+    // check('idAsignatura', 'El id de la Asignatura no es válido').isMongoId(),
     check('unidad','La unidad es requerida').not().isEmpty(),
     validarJWT,
     validarRoles('ADMINISTRADOR'),
@@ -24,7 +24,7 @@ router.post('/', [
 ], createUnidades);
 
 router.put('/:id', [
-    check('idAsignatura', 'El id de la Asignatura no es válido').isMongoId(),
+    // check('idAsignatura', 'El id de la Asignatura no es válido').isMongoId(),
     check('unidad','La unidad es requerida').not().isEmpty(),
     check('id','El id no es válido').isMongoId(),
     validarJWT,

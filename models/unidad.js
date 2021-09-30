@@ -9,7 +9,10 @@ const unidadSchema = new Schema({
     codUnidad : {
         type: String,
         required: true,
-        unique:true
+    },
+    codAsignatura : {
+        type: String,
+        required: true
     },
     proposito : {
         type: String,

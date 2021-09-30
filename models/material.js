@@ -20,9 +20,13 @@ const materialSchema = Schema({
         type: String,
         required:true
     },
+    name: {
+        type: String,
+        required:true
+    },
     status: {
         type: Boolean,
-        default: false
+        default: true
     }
 });
 

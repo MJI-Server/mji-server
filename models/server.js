@@ -3,6 +3,7 @@ const http = require('http');
 const path = require('path');
 const cors = require('cors');
 const dbConection = require('../db/dbconection');
+const fileUpload = require('express-fileupload');
 
 class Server {
 
@@ -28,6 +29,11 @@ class Server {
    
 
     middlewares() {
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/',
+            createParentPath:true
+        }));
         this.app.use( express.static( path.resolve( __dirname, '../public' ) ) );
         this.app.use(express.json());
         this.app.use(cors());
@@ -43,6 +49,7 @@ class Server {
         this.app.use(this.tareas,require('../routes/tarea'));
         this.app.use(this.enunciados,require('../routes/enunciado'));
         this.app.use(this.items,require('../routes/item'));
+        
        
     }
 
