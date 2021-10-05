@@ -1,11 +1,15 @@
-const Usuario = require("../models/usuario");
+const UsuarioSchema = require("../models/usuario");
+const Colegio = require("../models/colegio");
 const bcrypt = require('bcryptjs');
 const { response } = require("express");
-const Colegio = require("../models/colegio");
 const Curso = require("../models/curso");
+const obtenerConexion = require("../db/conexiones");
+const obtenerModelo = require("../db/modelos");
 
 const getUsuarios = async(req,res=response)=>{
     try {
+        let connPRE = obtenerConexion(req.body.conexion);
+        let Usuario = obtenerModelo('Usuario', UsuarioSchema, connPRE);
         const usuarios = await Usuario.find();
         res.status(200).json({
             ok:true,
@@ -20,11 +24,13 @@ const getUsuarios = async(req,res=response)=>{
 }
 const newUsuario = async(req,res=response)=>{
     try {
-        const {usuario, password, grado, letra, rbd} = req.body;
-        const rbdSplit = rbd.split('-')[0];
-        const colegio = await Colegio.findOne({rbd:rbdSplit});
+        const {conexion,usuario, password, grado, letra, rbd} = req.body;
+        let connPRE = obtenerConexion(conexion);
+        let Usuario = obtenerModelo('Usuario', UsuarioSchema, connPRE);
+        // const rbdSplit = rbd.split('-')[0];
+        const colegio = await Colegio.findOne({rbd});
         const curso = await Curso.findOne({letra,grado});
-        console.log(curso)
+
         if(!colegio || !curso){
             return res.status(404).json({
                 ok:false,
@@ -43,7 +49,7 @@ const newUsuario = async(req,res=response)=>{
         user.password = bcrypt.hashSync(password,salt);
         user.idColegio = colegio._id;
         user.idCurso = curso._id;
-        console.log(colegio);
+
         await user.save();
         res.status(200).json({
             ok:true,
@@ -59,8 +65,10 @@ const newUsuario = async(req,res=response)=>{
 }
 const editUsuario = async(req,res=response)=>{
     try {
+        let {conexion,password, ...rest} = req.body;
+        let connPRE = obtenerConexion(conexion);
+        let Usuario = obtenerModelo('Usuario', UsuarioSchema, connPRE);
         const id = req.params.id;
-        let {password, ...rest} = req.body;
         const verificarUsuario = await Usuario.findById(id);
         if(!verificarUsuario){
             return res.json({
@@ -68,7 +76,6 @@ const editUsuario = async(req,res=response)=>{
                 msg:'El usuario no existe'
             });
         };
-        console.log(rest)
         const salt = bcrypt.genSaltSync(1);
         password = bcrypt.hashSync(password,salt);
         
@@ -90,6 +97,8 @@ const editUsuario = async(req,res=response)=>{
 const deleteUsuario = async(req,res=response)=>{
 
         try {
+            let connPRE = obtenerConexion(req.body.conexion);
+            let Usuario = obtenerModelo('Usuario', UsuarioSchema, connPRE);
             const id = req.params.id;
             const verificarUsuario = await Usuario.findById(id);
             if(!verificarUsuario){

@@ -11,7 +11,7 @@ const validarJWT = require('../middlewares/validarjwt');
 
 const router = Router();
 
-router.get('/', [
+router.post('/get', [
     validarJWT
 ], getItems);
 

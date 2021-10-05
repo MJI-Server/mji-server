@@ -1,11 +1,16 @@
 const { response } = require("express");
 const jwt = require("jsonwebtoken");
-const Usuario = require("../models/usuario");
+const obtenerConexion = require("../db/conexiones");
+const obtenerModelo = require("../db/modelos");
+const Curso = require("../models/curso");
+const UsuarioSchema = require("../models/usuario");
 
 
 const validarJWT = async(req, res=response, next)=>{
     try {
-        const token = req.header('x-token');
+    const token = req.header('x-token');
+    const {conexion} = req.body;
+    console.log(req.body);
     if(!token){
         return res.status(401).json({
             ok:false,
@@ -19,13 +24,17 @@ const validarJWT = async(req, res=response, next)=>{
             msg:'El token no es valido'
         });
     };
-    const usuario = await Usuario.findById(uid).populate({path:'idCurso', populate:{path:'asignaturas', populate:{path:'unidades',populate:{path:'oas'}}}});
+    let connPRE = obtenerConexion(conexion);
+    let Usuario = obtenerModelo('Usuario', UsuarioSchema, connPRE);
+    const usuario = await Usuario.findById(uid);
     if(!usuario || usuario.status === false){
         return res.status(401).json({
             ok:false,
             msg:'El usuario no existe o no pertenece a la organización'
         });
     }
+    const curso = await Curso.findById(usuario.idCurso).populate({path:'asignaturas', populate:{path:'unidades', populate:{path:'oas'}}});
+    usuario.idCurso = curso;
     req.usuario = usuario;
     next();
     } catch (error) {

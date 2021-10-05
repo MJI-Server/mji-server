@@ -13,7 +13,7 @@ const validarRoles = require('../middlewares/validar-rol');
 
 const router = Router();
 
-router.get('/', [
+router.post('/get', [
     validarJWT
 ], getAsignaturas);
 router.post('/', [

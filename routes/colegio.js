@@ -14,7 +14,7 @@ const { getColegios, crearColegio, actualizarColegio, eliminarColegio } = requir
 
 const router = Router();
 
-router.get('/', getColegios);
+router.post('/get', getColegios);
 
 router.post('/',[
     check('rbd','El rbd es requerido').not().isEmpty(),

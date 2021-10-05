@@ -14,7 +14,7 @@ const validarJWT = require('../middlewares/validarjwt');
 
 const router = Router();
 
-router.get('/',validarJWT, getUsuarios);
+router.post('/get',validarJWT, getUsuarios);
 router.post('/',[
     check('email','Ingrese un mail valido').isEmail(),
     check('password','El password es requerido').not().isEmpty(),

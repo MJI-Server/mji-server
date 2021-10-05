@@ -3,7 +3,7 @@ const Colegio = require('../models/colegio');
 
 const getColegios = async ( req, res = response ) => {
 
-    const colegios = await Colegio.find();
+    const colegios = await Colegio.find({status:true});
 
     try {
         res.status(200).json({

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const dbConection =async()=>{
     try {
-        const conn = await mongoose.connect(process.env.DB_CNN,{
+        const conn = await mongoose.connect(`${process.env.DB_CNN}/MJIServer`,{
             useCreateIndex:true,
             useFindAndModify:false,
             useNewUrlParser:true,

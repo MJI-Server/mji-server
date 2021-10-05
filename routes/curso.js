@@ -14,7 +14,7 @@ const validarRoles = require('../middlewares/validar-rol');
 
 const router = Router();
 
-router.get('/', getCursos);
+router.post('/get',validarJWT, getCursos);
 
 router.post('/',[
     check('letra','La letra del curso es requerida').not().isEmpty(),

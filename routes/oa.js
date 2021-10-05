@@ -13,7 +13,7 @@ const validarRoles = require('../middlewares/validar-rol');
 
 const router = Router();
 
-router.get('/', getOA);
+router.post('/get',validarJWT, getOA);
 
 router.post('/',[
     check('oa','El oa es requerido').not().isEmpty(),

@@ -23,7 +23,7 @@ router.post('/register',[
     check('usuario','El usuario es requerido').not().isEmpty(),
     validarCampos
 ], register);
-router.get('/renew',[
+router.post('/renew',[
     validarJWT
 ], renewJWT);
 

@@ -1,17 +1,20 @@
 const { response } = require('express');
-const Material = require('../models/material');
+const materialSchema = require('../models/material');
 const path = require('path');
 const fs = require('fs');
 const { subirArchivo } = require('../helpers/subir-archivo');
 const Colegio = require('../models/colegio');
 const Curso = require('../models/curso');
 const Unidad = require('../models/unidad');
+const obtenerConexion = require('../db/conexiones');
+const obtenerModelo = require('../db/modelos');
 
 const crearMaterial = async ( req, res = response ) => {
 
     
     try {
         const {idUnidad,idCurso,idColegio} = req.params;
+        const {conexion} = req.body;
         const colegio = await Colegio.findById(idColegio);
         const curso = await Curso.findById(idCurso);
         const unidad = await Unidad.findById(idUnidad);
@@ -24,6 +27,9 @@ const crearMaterial = async ( req, res = response ) => {
                 msg:'Error al crear material'
             })
         }
+        let conn = obtenerConexion(conexion);
+        let Material = obtenerModelo('Material', materialSchema, conn);
+
         const material = new Material({
             idColegio,
             idCurso,
@@ -32,6 +38,8 @@ const crearMaterial = async ( req, res = response ) => {
             name:req.files.archivo.name
 
         });
+
+
         await material.save();
         const pathImagen = path.join(__dirname, '../uploads', carpeta);
         const file = res.sendFile( pathImagen);
@@ -53,6 +61,9 @@ const actualizarMaterial = async ( req, res = response ) => {
 
     try {
         const {id} = req.params;
+        const {conexion} = req.body;
+        let conn = obtenerConexion(conexion);
+        let Material = obtenerModelo('Material', materialSchema, conn);
         const material = await Material.findById(id);
         
         const colegio = await Colegio.findById(material.idColegio);
@@ -94,6 +105,9 @@ const eliminarMaterial = async ( req, res = response ) => {
 
     try {
         const {id} = req.params;
+        const {conexion} = req.body;
+        let conn = obtenerConexion(conexion);
+        let Material = obtenerModelo('Material', materialSchema, conn);
         const material = await Material.findById(id);
         
         const colegio = await Colegio.findById(material.idColegio);
@@ -126,9 +140,10 @@ const eliminarMaterial = async ( req, res = response ) => {
 
 const mostrarMaterial = async(req, res = response)=>{
     
-    const {id} = req.params;
     const {idUnidad,idCurso,idColegio} = req.body;
+
     const carpeta = `${idColegio}/${idCurso}/${idUnidad}`;
+
 
     //Limpiar imágenes previas
         const pathImagen = path.join(__dirname, '../uploads', carpeta);

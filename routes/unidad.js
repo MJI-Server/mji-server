@@ -13,7 +13,7 @@ const validarRoles = require('../middlewares/validar-rol');
 
 const router = Router();
 
-router.get('/', getUnidades );
+router.post('/get',validarJWT, getUnidades );
 
 router.post('/', [
     // check('idAsignatura', 'El id de la Asignatura no es válido').isMongoId(),

@@ -63,4 +63,4 @@ const UsuarioSchema = new Schema({
     }
 });
 
-module.exports = model('Usuario',UsuarioSchema);
+module.exports = UsuarioSchema;
