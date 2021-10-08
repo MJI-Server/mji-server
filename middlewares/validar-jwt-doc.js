@@ -6,10 +6,10 @@ const Curso = require("../models/curso");
 const UsuarioSchema = require("../models/usuario");
 
 
-const validarJWT = async(req, res=response, next)=>{
+const validarJWTDoc = async(req, res=response, next)=>{
     try {
     const token = req.header('x-token');
-    const {conexion} = req.body;
+    const {conexion} = req.params;
     if(!token){
         return res.status(401).json({
             ok:false,
@@ -45,4 +45,4 @@ const validarJWT = async(req, res=response, next)=>{
     }
 }
 
-module.exports = validarJWT;
+module.exports = validarJWTDoc;

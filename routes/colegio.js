@@ -9,12 +9,13 @@ const validarCampos = require('../middlewares/validarcampos');
 
 const validarJWT = require('../middlewares/validarjwt');
 const validarRoles = require('../middlewares/validar-rol');
-const { getColegios, crearColegio, actualizarColegio, eliminarColegio } = require('../controllers/colegio');
+const { getColegios, crearColegio, actualizarColegio, eliminarColegio, getAllColegios } = require('../controllers/colegio');
 
 
 const router = Router();
 
 router.post('/get', getColegios);
+router.post('/getAll',validarJWT, getAllColegios);
 
 router.post('/',[
     check('rbd','El rbd es requerido').not().isEmpty(),

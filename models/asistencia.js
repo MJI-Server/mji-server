@@ -20,9 +20,10 @@ const asistenciaSchema = Schema({
         type: Date,
         required:true
     }],
-    presente: {
-        type: Boolean,
-        default: true
+    asistencia: {
+        type: String,
+        enum:['Presente','Ausente','Retraso','Justificado'],
+        required:true
     }
 });
 

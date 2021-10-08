@@ -1,11 +1,13 @@
 const { response } = require('express');
-const materialSchema = require('../models/material');
 const path = require('path');
 const fs = require('fs');
+
+const materialSchema = require('../models/material');
 const { subirArchivo } = require('../helpers/subir-archivo');
 const Colegio = require('../models/colegio');
 const Curso = require('../models/curso');
 const Unidad = require('../models/unidad');
+const Asignatura = require('../models/asignatura');
 const obtenerConexion = require('../db/conexiones');
 const obtenerModelo = require('../db/modelos');
 
@@ -13,13 +15,11 @@ const crearMaterial = async ( req, res = response ) => {
 
     
     try {
-        const {idUnidad,idCurso,idColegio} = req.params;
+        const {idUnidad,idCurso,idAsignatura,idColegio} = req.params;
         const {conexion} = req.body;
-        const colegio = await Colegio.findById(idColegio);
-        const curso = await Curso.findById(idCurso);
-        const unidad = await Unidad.findById(idUnidad);
+        const {colegio,curso,asignatura,unidad} = req;
         
-        const carpeta = `${colegio.nombre}/${curso.curso}-${curso.letra}/${unidad.unidad}`;
+        const carpeta = `${colegio}/${curso}/${asignatura}/${unidad}`;
         const nombre = await subirArchivo(req.files,undefined,carpeta);
         if(!nombre){
             return res.status(400).json({
@@ -34,6 +34,7 @@ const crearMaterial = async ( req, res = response ) => {
             idColegio,
             idCurso,
             idUnidad,
+            idAsignatura,
             material:nombre,
             name:req.files.archivo.name
 
@@ -69,9 +70,9 @@ const actualizarMaterial = async ( req, res = response ) => {
         const colegio = await Colegio.findById(material.idColegio);
         const curso = await Curso.findById(material.idCurso);
         const unidad = await Unidad.findById(material.idUnidad);
+        const asignatura = await Asignatura.findById(material.idAsignatura);
+        const carpeta = `${colegio.nombre}/${curso.curso}-${curso.letra}/${asignatura.asignatura}/${unidad.unidad}`;
         
-        const carpeta = `${colegio.nombre}/${curso.curso}-${curso.letra}/${unidad.unidad}`;
-
         //Limpiar imágenes previas
         const pathImagen = path.join(__dirname, '../uploads', carpeta,material.material);
         if(fs.existsSync(pathImagen)){
@@ -105,16 +106,19 @@ const eliminarMaterial = async ( req, res = response ) => {
 
     try {
         const {id} = req.params;
-        const {conexion} = req.body;
-        let conn = obtenerConexion(conexion);
+        let conn = obtenerConexion('MJIServer');
         let Material = obtenerModelo('Material', materialSchema, conn);
         const material = await Material.findById(id);
         
         const colegio = await Colegio.findById(material.idColegio);
         const curso = await Curso.findById(material.idCurso);
         const unidad = await Unidad.findById(material.idUnidad);
+        const asignatura = await Asignatura.findById(material.idAsignatura);
 
-        const carpeta = `${colegio.nombre}/${curso.curso}-${curso.letra}/${unidad.unidad}`;
+        // .replace(/ /g, "")
+        const carpeta = `${colegio.nombre}/${curso.curso}-${curso.letra}/${asignatura.asignatura}/${unidad.unidad}`;
+
+
 
 
         //Limpiar imágenes previas
@@ -140,21 +144,65 @@ const eliminarMaterial = async ( req, res = response ) => {
 
 const mostrarMaterial = async(req, res = response)=>{
     
-    const {idUnidad,idCurso,idColegio} = req.body;
+    try {
+    const {id,conexion} = req.params;
+    
+    let conn = obtenerConexion(conexion);
+    let Material = obtenerModelo('Material', materialSchema, conn);
+    const material = await Material.findById(id);
+    
+    const colegio = await Colegio.findById(material.idColegio);
+    const curso = await Curso.findById(material.idCurso);
+    const unidad = await Unidad.findById(material.idUnidad);
+    const asignatura = await Asignatura.findById(material.idAsignatura);
+    const carpeta = `${colegio.nombre}/${curso.curso}-${curso.letra}/${asignatura.asignatura}/${unidad.unidad}/${material.material}`;
 
-    const carpeta = `${idColegio}/${idCurso}/${idUnidad}`;
-
-
-    //Limpiar imágenes previas
         const pathImagen = path.join(__dirname, '../uploads', carpeta);
         if(fs.existsSync(pathImagen)){
             return res.sendFile( pathImagen);
         }
+        console.log('Error')
+
+            res.json({
+                ok:false
+            })
+        
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            ok:false,
+            msg:'Hable con el administrador'
+        })
+    }
+}
+const getMateriales = async(req, res = response)=>{
+    
+    try {
+    const {idAsignatura,idCurso} = req.params;
+    const {conexion} = req.body;
+    let conn = obtenerConexion(conexion);
+    let Material = obtenerModelo('Material', materialSchema, conn);
+    const materiales = await Material.find({idAsignatura,idCurso});
+    
+    res.status(200).json({
+        ok:true,
+        materiales
+    });
+
+ 
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            ok:false,
+            msg:'Hable con el administrador'
+        })
+    }
 }
 
 module.exports = {
     crearMaterial,
     actualizarMaterial,
     eliminarMaterial,
-    mostrarMaterial
+    mostrarMaterial,
+    getMateriales
 }

@@ -19,6 +19,24 @@ const getColegios = async ( req, res = response ) => {
     }
 
 }
+const getAllColegios = async ( req, res = response ) => {
+
+    const colegios = await Colegio.find();
+
+    try {
+        res.status(200).json({
+            ok: true,
+            colegios
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador'
+        });
+    }
+
+}
 
 const crearColegio = async ( req, res = response ) => {
 
@@ -122,5 +140,6 @@ module.exports = {
     getColegios,
     crearColegio,
     actualizarColegio,
-    eliminarColegio
+    eliminarColegio,
+    getAllColegios
 }

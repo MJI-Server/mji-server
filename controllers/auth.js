@@ -9,7 +9,6 @@ const Curso = require("../models/curso");
 const login = async(req, res=response) => {
     try {
         const {conexion ,email, password} = req.body;
-        console.log(conexion)
         let connPRE = obtenerConexion(conexion);
         let Usuario = obtenerModelo('Usuario', UsuarioSchema, connPRE);
 

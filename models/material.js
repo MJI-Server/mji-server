@@ -11,6 +11,11 @@ const materialSchema = Schema({
         ref:'Curso',
         required:true
     },
+    idAsignatura: {
+        type:Schema.Types.ObjectId,
+        ref:'Asignatura',
+        required:true
+    },
     idUnidad: {
         type:Schema.Types.ObjectId,
         ref:'Unidad',

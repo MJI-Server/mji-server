@@ -24,8 +24,8 @@ const getUsuarios = async(req,res=response)=>{
 }
 const newUsuario = async(req,res=response)=>{
     try {
-        const {conexion,usuario, password, grado, letra, rbd} = req.body;
-        let connPRE = obtenerConexion(conexion);
+        const {organizacion,usuario, password, grado, letra, rbd} = req.body;
+        let connPRE = obtenerConexion(organizacion);
         let Usuario = obtenerModelo('Usuario', UsuarioSchema, connPRE);
         // const rbdSplit = rbd.split('-')[0];
         const colegio = await Colegio.findOne({rbd});
@@ -56,7 +56,6 @@ const newUsuario = async(req,res=response)=>{
             usuario:user,
         });
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             ok:false,
             msg:'Error del servidor'
@@ -86,7 +85,6 @@ const editUsuario = async(req,res=response)=>{
             usuario:newUsuario,
         });
     } catch (error) {
-        console.log(error);
         res.status(500).json({
             ok:false,
             msg:'Error del servidor'
@@ -116,7 +114,6 @@ const deleteUsuario = async(req,res=response)=>{
                 usuario
             });
         } catch (error) {
-            console.log(error);
             res.status(500).json({
                 ok:false,
                 msg:'Error del servidor'
