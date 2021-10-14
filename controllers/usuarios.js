@@ -8,8 +8,8 @@ const obtenerModelo = require("../db/modelos");
 
 const getUsuarios = async(req,res=response)=>{
     try {
-        let connPRE = obtenerConexion(req.body.conexion);
-        let Usuario = obtenerModelo('Usuario', UsuarioSchema, connPRE);
+        let conn = obtenerConexion(req.body.conexion);
+        let Usuario = obtenerModelo('Usuario', UsuarioSchema, conn);
         const usuarios = await Usuario.find();
         res.status(200).json({
             ok:true,
@@ -25,8 +25,8 @@ const getUsuarios = async(req,res=response)=>{
 const newUsuario = async(req,res=response)=>{
     try {
         const {organizacion,usuario, password, grado, letra, rbd} = req.body;
-        let connPRE = obtenerConexion(organizacion);
-        let Usuario = obtenerModelo('Usuario', UsuarioSchema, connPRE);
+        let conn = obtenerConexion(organizacion);
+        let Usuario = obtenerModelo('Usuario', UsuarioSchema, conn);
         // const rbdSplit = rbd.split('-')[0];
         const colegio = await Colegio.findOne({rbd});
         const curso = await Curso.findOne({letra,grado});
@@ -65,8 +65,8 @@ const newUsuario = async(req,res=response)=>{
 const editUsuario = async(req,res=response)=>{
     try {
         let {conexion,password, ...rest} = req.body;
-        let connPRE = obtenerConexion(conexion);
-        let Usuario = obtenerModelo('Usuario', UsuarioSchema, connPRE);
+        let conn = obtenerConexion(conexion);
+        let Usuario = obtenerModelo('Usuario', UsuarioSchema, conn);
         const id = req.params.id;
         const verificarUsuario = await Usuario.findById(id);
         if(!verificarUsuario){
@@ -95,8 +95,8 @@ const editUsuario = async(req,res=response)=>{
 const deleteUsuario = async(req,res=response)=>{
 
         try {
-            let connPRE = obtenerConexion(req.body.conexion);
-            let Usuario = obtenerModelo('Usuario', UsuarioSchema, connPRE);
+            let conn = obtenerConexion(req.body.conexion);
+            let Usuario = obtenerModelo('Usuario', UsuarioSchema, conn);
             const id = req.params.id;
             const verificarUsuario = await Usuario.findById(id);
             if(!verificarUsuario){
