@@ -6,6 +6,16 @@ const TareaSchema = new Schema({
         ref:'Unidad',
         required:true
     },
+    idAsignatura: {
+        type:Schema.Types.ObjectId,
+        ref:'Asignatura',
+        required:true
+    },
+    idCurso: {
+        type:Schema.Types.ObjectId,
+        ref:'Curso',
+        required:true
+    },
     titulo:{
         type: String,
         required: true,

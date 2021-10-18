@@ -4,12 +4,11 @@ const Unidad = require("../models/unidad");
 
 const getTareas = async ( req, res = response ) => {
 
-    const { idUnidad } = req.body;
+    const { idAsignatura } = req.body;
 
     try {
         
-        const tareas = await Tarea.find({idUnidad}).populate({path:'enunciados', populate:{path:'items'}});
-        
+        const tareas = await Tarea.find({idAsignatura}).populate({path:'enunciados', populate:{path:'items'}});
         res.status(200).json({
             ok: true,
             tareas

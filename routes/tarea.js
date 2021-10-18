@@ -20,8 +20,8 @@ router.post('/',[
     check('idUnidad', 'El id de la unidad no es válido').isMongoId(),
     check('titulo', 'El título de la tarea es requerido').not().isEmpty(),
     check('subtitle', 'El subtítulo es requerido').not().isEmpty(),
-    check('dateInit', 'La fecha de inicio es requerida').custom( isDate ),
-    check('dateEnd', 'La fecha de finalización es requerida').custom( isDate ),
+    // check('dateInit', 'La fecha de inicio es requerida').custom( isDate ),
+    // check('dateEnd', 'La fecha de finalización es requerida').custom( isDate ),
     validarJWT,
     validarCampos    
 ], createTarea);
