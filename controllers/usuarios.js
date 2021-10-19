@@ -24,8 +24,9 @@ const getUsuarios = async(req,res=response)=>{
 }
 const newUsuario = async(req,res=response)=>{
     try {
-        const {organizacion,usuario, password, grado, letra, rbd} = req.body;
-        let conn = obtenerConexion(organizacion);
+        const {conexion,usuario, password, grado, letra, rbd} = req.body;
+        console.log(conexion)
+        let conn = obtenerConexion(conexion);
         let Usuario = obtenerModelo('Usuario', UsuarioSchema, conn);
         // const rbdSplit = rbd.split('-')[0];
         const colegio = await Colegio.findOne({rbd});
@@ -56,6 +57,48 @@ const newUsuario = async(req,res=response)=>{
             usuario:user,
         });
     } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            ok:false,
+            msg:'Error del servidor'
+        });
+    }
+}
+const newDocente = async(req,res=response)=>{
+    try {
+        const {conexion,email, password, rbd} = req.body;
+        console.log(rbd)
+        let conn = obtenerConexion(conexion);
+        let Usuario = obtenerModelo('Usuario', UsuarioSchema, conn);
+        // const rbdSplit = rbd.split('-')[0];
+        const colegio = await Colegio.findOne({rbd});
+        console.log(colegio)
+
+        if(!colegio){
+            return res.status(404).json({
+                ok:false,
+                msg:'El colegio no existe' 
+            })
+        }
+        const verificarUsuario = await Usuario.findOne({email});
+        if(verificarUsuario){
+            return res.json({
+                ok:false,
+                msg:'El usuario ya existe'
+            });
+        };
+        const user = new Usuario(req.body);
+        const salt = bcrypt.genSaltSync(1);
+        user.password = bcrypt.hashSync(password,salt);
+        user.idColegio = colegio._id;
+
+        await user.save();
+        res.status(200).json({
+            ok:true,
+            usuario:user,
+        });
+    } catch (error) {
+        console.log(error)
         res.status(500).json({
             ok:false,
             msg:'Error del servidor'
@@ -78,7 +121,7 @@ const editUsuario = async(req,res=response)=>{
         const salt = bcrypt.genSaltSync(1);
         password = bcrypt.hashSync(password,salt);
         
-        const newUsuario = await Usuario.findByIdAndUpdate(id, {rest,password}, {new:true});
+        const newUsuario = await Usuario.findByIdAndUpdate(id, rest, {new:true});
         
         res.status(200).json({
             ok:true,
@@ -126,5 +169,6 @@ module.exports = {
     getUsuarios,
     newUsuario,
     editUsuario,
-    deleteUsuario
+    deleteUsuario,
+    newDocente
 }

@@ -5,7 +5,7 @@
 */
 const {Router} = require('express');
 const { check } = require('express-validator');
-const { getUsuarios, newUsuario, editUsuario, deleteUsuario } = require('../controllers/usuarios');
+const { getUsuarios, newUsuario, editUsuario, deleteUsuario,newDocente } = require('../controllers/usuarios');
 const { customRol } = require('../custom/custom-rol');
 const validarRoles = require('../middlewares/validar-rol');
 const validarCampos = require('../middlewares/validarcampos');
@@ -18,11 +18,19 @@ router.post('/get',validarJWT, getUsuarios);
 router.post('/',[
     check('email','Ingrese un mail valido').isEmail(),
     check('password','El password es requerido').not().isEmpty(),
-    // check('usuario','El usuario es requerido').not().isEmpty(),
+    check('usuario','El usuario es requerido').not().isEmpty(),
     validarJWT,
     validarRoles('ADMINISTRADOR'),
     validarCampos
 ], newUsuario);
+router.post('/addDocente',[
+    check('email','Ingrese un mail valido').isEmail(),
+    check('password','El password es requerido').not().isEmpty(),
+    // check('usuario','El usuario es requerido').not().isEmpty(),
+    validarJWT,
+    validarRoles('ADMINISTRADOR'),
+    validarCampos
+], newDocente);
 router.put('/:id',[
     check('email','Ingrese un mail valido').isEmail(),
     check('usuario','El usuario es requerido').not().isEmpty(),

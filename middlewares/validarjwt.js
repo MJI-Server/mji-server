@@ -9,7 +9,7 @@ const UsuarioSchema = require("../models/usuario");
 const validarJWT = async(req, res=response, next)=>{
     try {
     const token = req.header('x-token');
-    const {conexion} = req.body;
+    const {conexion,administrador} = req.body;
     if(!token){
         return res.status(401).json({
             ok:false,
@@ -23,8 +23,15 @@ const validarJWT = async(req, res=response, next)=>{
             msg:'El token no es valido'
         });
     };
-    let connPRE = obtenerConexion(conexion);
-    let Usuario = obtenerModelo('Usuario', UsuarioSchema, connPRE);
+    let conn;
+    let Usuario;
+    if(administrador===true){
+         conn = obtenerConexion('MJIServer');
+         Usuario = obtenerModelo('Usuario', UsuarioSchema, conn);
+    }else{
+        conn = obtenerConexion(conexion);
+        Usuario = obtenerModelo('Usuario', UsuarioSchema, conn);
+    }
     const usuario = await Usuario.findById(uid);
     if(!usuario || usuario.status === false){
         return res.status(401).json({

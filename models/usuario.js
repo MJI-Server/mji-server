@@ -30,7 +30,7 @@ const UsuarioSchema = new Schema({
     },
     usuario:{
         type:String,
-        required:true
+        required:false
     },
     email:{
         type:String,
