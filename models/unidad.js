@@ -20,11 +20,11 @@ const unidadSchema = new Schema({
     },
     conocimientosPrevios : [{
         type: String,
-        required: true
+        required: false
     },],
     palabrasClaves : [{
         type: String,
-        required: true
+        required: false
     },],
     unidad : {
         type: String,
