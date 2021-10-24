@@ -2,10 +2,6 @@ const {model, Schema} = require('mongoose');
 
 const oaSchema = new Schema({
     
-    codUnidad: {
-        type: String,
-        required: true
-    },
     codOA: {
         type: String,
         required: true
