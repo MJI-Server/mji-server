@@ -33,7 +33,7 @@ router.post('/:idColegio/:idCurso/:idAsignatura/:idUnidad',[
     unidadExist,
     validarArchivo,
     validarJWT,
-    validarRoles('ADMINISTRADOR'),
+    // validarRoles('ADMINISTRADOR'),
     validarCampos,
 ], crearMaterial);
 

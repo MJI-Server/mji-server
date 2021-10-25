@@ -19,7 +19,7 @@ const crearMaterial = async ( req, res = response ) => {
         const {conexion} = req.body;
         const {colegio,curso,asignatura,unidad} = req;
         
-        const carpeta = `${colegio}/${curso}/${asignatura}/${unidad}`;
+        const carpeta = `${colegio}/${curso}/${asignatura}/${unidad.split(':')[0]}`;
         const nombre = await subirArchivo(req.files,undefined,carpeta);
         if(!nombre){
             return res.status(400).json({
@@ -51,6 +51,7 @@ const crearMaterial = async ( req, res = response ) => {
             file
         })
     } catch (msg) {
+        console.log(msg)
         res.status(400).json({
             msg
         })
@@ -71,7 +72,7 @@ const actualizarMaterial = async ( req, res = response ) => {
         const curso = await Curso.findById(material.idCurso);
         const unidad = await Unidad.findById(material.idUnidad);
         const asignatura = await Asignatura.findById(material.idAsignatura);
-        const carpeta = `${colegio.nombre}/${curso.curso}-${curso.letra}/${asignatura.asignatura}/${unidad.unidad}`;
+        const carpeta = `${colegio.nombre}/${curso.curso}-${curso.letra}/${asignatura.asignatura}/${unidad.unidad.split(':')[0]}`;
         
         //Limpiar imágenes previas
         const pathImagen = path.join(__dirname, '../uploads', carpeta,material.material);
@@ -116,7 +117,7 @@ const eliminarMaterial = async ( req, res = response ) => {
         const asignatura = await Asignatura.findById(material.idAsignatura);
 
         // .replace(/ /g, "")
-        const carpeta = `${colegio.nombre}/${curso.curso}-${curso.letra}/${asignatura.asignatura}/${unidad.unidad}`;
+        const carpeta = `${colegio.nombre}/${curso.curso}-${curso.letra}/${asignatura.asignatura}/${unidad.unidad.split(':')[0]}`;
 
 
 
@@ -155,7 +156,7 @@ const mostrarMaterial = async(req, res = response)=>{
     const curso = await Curso.findById(material.idCurso);
     const unidad = await Unidad.findById(material.idUnidad);
     const asignatura = await Asignatura.findById(material.idAsignatura);
-    const carpeta = `${colegio.nombre}/${curso.curso}-${curso.letra}/${asignatura.asignatura}/${unidad.unidad}/${material.material}`;
+    const carpeta = `${colegio.nombre}/${curso.curso}-${curso.letra}/${asignatura.asignatura}/${unidad.unidad.split(':')[0]}/${material.material}`;
 
         const pathImagen = path.join(__dirname, '../uploads', carpeta);
         if(fs.existsSync(pathImagen)){
