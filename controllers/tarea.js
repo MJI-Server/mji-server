@@ -29,6 +29,9 @@ const getTareas = async ( req, res = response ) => {
 
 const createTarea = async ( req, res = response ) => {
 
+    let conn = obtenerConexion(req.body.conexion);
+    let Tarea = obtenerModelo('Tarea', TareaSchema, conn);
+
     const tarea = new Tarea( req.body );
 
     const { idUnidad } = req.body;
@@ -65,6 +68,9 @@ const updateTarea = async ( req, res = response ) => {
 
     const tareaID = req.params.id;
 
+    let conn = obtenerConexion(req.body.conexion);
+    let Tarea = obtenerModelo('Tarea', TareaSchema, conn);
+
     try {
         
         const tarea = await Tarea.findById( tareaID );
@@ -100,6 +106,9 @@ const updateTarea = async ( req, res = response ) => {
 const deleteTarea = async ( req, res = response ) => {
 
     const tareaID = req.params.id;
+
+    let conn = obtenerConexion(req.body.conexion);
+    let Tarea = obtenerModelo('Tarea', TareaSchema, conn);
 
     try {
         
