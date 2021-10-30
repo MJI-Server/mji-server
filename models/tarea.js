@@ -49,4 +49,4 @@ TareaSchema.method('toJSON', function(){
     return object;
 })
 
-module.exports = model('Tarea', TareaSchema );
+module.exports = TareaSchema;

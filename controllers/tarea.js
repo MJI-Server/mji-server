@@ -1,5 +1,8 @@
-const Tarea = require("../models/tarea");
+
 const { response } = require("express");
+const obtenerConexion = require("../db/conexiones");
+const obtenerModelo = require("../db/modelos");
+const TareaSchema = require("../models/tarea");
 const Unidad = require("../models/unidad");
 
 const getTareas = async ( req, res = response ) => {
@@ -7,7 +10,9 @@ const getTareas = async ( req, res = response ) => {
     const { idAsignatura } = req.body;
 
     try {
-        
+
+        let conn = obtenerConexion(req.body.conexion);
+        let Tarea = obtenerModelo('Tarea', TareaSchema, conn);
         const tareas = await Tarea.find({idAsignatura}).populate({path:'enunciados', populate:{path:'items'}});
         res.status(200).json({
             ok: true,
