@@ -20,6 +20,7 @@ class Server {
         this.colegio = '/api/colegio';
         this.asistencia = '/api/asistencia';
         this.material = '/api/material';
+        this.notas = '/api/notas';
         this.tareas = '/api/tareas';
         this.tareaAlumno = '/api/tareaAlumno';
         this.enunciados = '/api/enunciados';
@@ -47,6 +48,7 @@ class Server {
         this.app.use(this.colegio,require('../routes/colegio'));
         this.app.use(this.asistencia,require('../routes/asistencia'));
         this.app.use(this.material,require('../routes/material'));
+        this.app.use(this.notas,require('../routes/nota'));
         this.app.use(this.tareas,require('../routes/tarea'));
         this.app.use(this.tareaAlumno,require('../routes/tarea_alumno'));
         this.app.use(this.enunciados,require('../routes/enunciado'));
