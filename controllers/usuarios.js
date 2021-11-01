@@ -128,6 +128,7 @@ const editUsuario = async(req,res=response)=>{
             usuario:newUsuario,
         });
     } catch (error) {
+        console.log(error)
         res.status(500).json({
             ok:false,
             msg:'Error del servidor'

@@ -25,6 +25,7 @@ class Server {
         this.tareaAlumno = '/api/tareaAlumno';
         this.enunciados = '/api/enunciados';
         this.items = '/api/items';
+        this.prueba = '/api/prueba';
         dbConection();
     }
 
@@ -53,6 +54,7 @@ class Server {
         this.app.use(this.tareaAlumno,require('../routes/tarea_alumno'));
         this.app.use(this.enunciados,require('../routes/enunciado'));
         this.app.use(this.items,require('../routes/item'));
+        this.app.use(this.prueba,require('../routes/prueba'));
         
        
     }

@@ -9,45 +9,40 @@ const validarCampos = require('../middlewares/validarcampos');
 
 const validarJWT = require('../middlewares/validarjwt');
 const validarRoles = require('../middlewares/validar-rol');
-const { crearMaterial, actualizarMaterial, eliminarMaterial, mostrarMaterial, getMateriales } = require('../controllers/material');
-const { validarArchivo } = require('../middlewares/validar-archivo');
-const { cursoExist, colegioExist, unidadExist, asignaturaExist } = require('../middlewares/validar-materiales');
+const { cursoExist, unidadExist, asignaturaExist } = require('../middlewares/validar-materiales');
+const { getPruebas, crearPrueba, actualizarPrueba, eliminarPrueba } = require('../controllers/prueba');
 
 
 const router = Router();
 
 
-router.post('/:idAsignatura/:idCurso',[
+router.post('/:idCurso/:idAsignatura/',[
     check('idAsignatura','El id de la asignatura no es valido').isMongoId(),
     check('idCurso','El id del curso no es valido').isMongoId(),
     validarJWT,
     validarCampos,
-], getMateriales);
-router.get('/:conexion/:id',[
-], mostrarMaterial);
-router.post('/:idColegio/:idCurso/:idAsignatura/:idUnidad',[
+], getPruebas);
+
+router.post('/newPrueba/:idCurso/:idAsignatura/:idUnidad',[
+    unidadExist,
     cursoExist,
     asignaturaExist,
-    colegioExist,
-    unidadExist,
-    validarArchivo,
     validarJWT,
-    // validarRoles('ADMINISTRADOR'),
+    validarRoles('DOCENTE','ADMINISTRADOR'),
     validarCampos,
-], crearMaterial);
+], crearPrueba);
 
 router.put('/:id', [
     validarJWT,
-    validarArchivo,
-    validarRoles('ADMINISTRADOR'),
+    validarRoles('DOCENTE','ADMINISTRADOR'),
     validarCampos,
-], actualizarMaterial);
+], actualizarPrueba);
 
 router.delete('/:id',[
     check('id','El id no es valido').isMongoId(),
     validarJWT,
-    validarRoles('ADMINISTRADOR'),
+    validarRoles('DOCENTE','ADMINISTRADOR'),
     validarCampos,
-], eliminarMaterial);
+], eliminarPrueba);
 
 module.exports = router;

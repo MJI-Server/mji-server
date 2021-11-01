@@ -25,8 +25,8 @@ const validarJWT = async(req, res=response, next)=>{
     };
     let conn;
     let Usuario;
-    console.log(administrador)
-    if(administrador===true){
+
+    if(administrador){
          conn = obtenerConexion('MJIServer');
          Usuario = obtenerModelo('Usuario', UsuarioSchema, conn);
     }else{
