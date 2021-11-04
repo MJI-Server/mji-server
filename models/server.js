@@ -26,20 +26,32 @@ class Server {
         this.enunciados = '/api/enunciados';
         this.items = '/api/items';
         this.prueba = '/api/prueba';
+        this.pruebaAlumno = '/api/pruebaAlumno';
         dbConection();
     }
 
    
 
     middlewares() {
+        const corsOptions = {
+            origin: 'http://localhost:3000',
+            optionsSuccessStatus: 200
+          }
         this.app.use(fileUpload({
             useTempFiles : true,
             tempFileDir : '/tmp/',
             createParentPath:true
         }));
+        // this.app.use((req, res, next) => {
+        //     res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+        //     res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+        //     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+        //     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+        //     next();
+        // });
         this.app.use( express.static( path.resolve( __dirname, '../public' ) ) );
         this.app.use(express.json());
-        this.app.use(cors());
+        this.app.use(cors(corsOptions));
         this.app.use(this.auth,require('../routes/auth'));
         this.app.use(this.curso,require('../routes/curso'));
         this.app.use(this.asignatura,require('../routes/asignatura'));
@@ -55,6 +67,7 @@ class Server {
         this.app.use(this.enunciados,require('../routes/enunciado'));
         this.app.use(this.items,require('../routes/item'));
         this.app.use(this.prueba,require('../routes/prueba'));
+        this.app.use(this.pruebaAlumno,require('../routes/prueba_alumno'));
         
        
     }

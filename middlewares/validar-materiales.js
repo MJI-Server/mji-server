@@ -18,15 +18,16 @@ const cursoExist = async(req,res =response, next)=>{
 
 }
 const colegioExist = async(req,res =response, next)=>{
-    const {idColegio} = req.params;
+    const {idColegio} = req.usuario;
     const colegio = await Colegio.findById(idColegio);
-    if(!colegio){
+    if(!colegio || colegio.status === false){
         return res.status(404).json({
             ok:false,
-            msg:`El colegio no existe`
+            msg:`El colegio no existe o ya no pertenece a edu7`
         })
     }
     req.colegio = colegio.nombre;
+    req.idColegio = colegio.id;
     next();
     }
 const asignaturaExist = async(req,res =response, next)=>{
