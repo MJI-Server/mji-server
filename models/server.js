@@ -28,6 +28,8 @@ class Server {
         this.items = '/api/items';
         this.prueba = '/api/prueba';
         this.pruebaAlumno = '/api/pruebaAlumno';
+        this.horario = '/api/horario';
+        this.bloque = '/api/bloque';
         dbConection();
     }
 
@@ -70,6 +72,8 @@ class Server {
         this.app.use(this.items,require('../routes/item'));
         this.app.use(this.prueba,require('../routes/prueba'));
         this.app.use(this.pruebaAlumno,require('../routes/prueba_alumno'));
+        this.app.use(this.horario,require('../routes/horario'));
+        this.app.use(this.bloque,require('../routes/bloque'));
         
        
     }

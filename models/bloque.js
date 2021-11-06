@@ -1,9 +1,9 @@
 const { Schema } = require('mongoose');
 
-const materialSchema = Schema({
-    idColegio: {
+const BloqueSchema = Schema({
+    idHorario: {
         type:Schema.Types.ObjectId,
-        ref:'Colegio',
+        ref:'Horario',
         required:true
     },
     idCurso: {
@@ -11,34 +11,34 @@ const materialSchema = Schema({
         ref:'Curso',
         required:true
     },
+    idUsuario: {
+        type:Schema.Types.ObjectId,
+        ref:'Usuario',
+        required:true
+    },
     idAsignatura: {
         type:Schema.Types.ObjectId,
         ref:'Asignatura',
         required:true
     },
-    idUnidad: {
-        type:Schema.Types.ObjectId,
-        ref:'Unidad',
-        required:true
-    },
-    material: {
+    dia: {
         type: String,
-        required:true
+        required: true
     },
-    name: {
-        type: String,
-        required:true
-    },
+    bloque: [{
+        type: Number,
+        required: true
+    }],
     status: {
         type: Boolean,
         default: true
     }
 });
 
-materialSchema.method('toJSON', function(){
+BloqueSchema.method('toJSON', function(){
     const { __v, _id, ...object } = this.toObject();
     object.id = _id;
     return object;
 })
 
-module.exports = materialSchema;
+module.exports = BloqueSchema;
