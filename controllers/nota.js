@@ -1,24 +1,26 @@
 const { response } = require('express');
 const obtenerConexion = require("../db/conexiones");
 const obtenerModelo = require("../db/modelos");
-const NotaSchema = require("../models/nota");
-const Asignatura = require('../models/asignatura');
+const NotaSchema = require('../models/nota');
 
 const getNotas = async ( req, res = response ) => {
 
-    const { idUsuario } = req.body;
+    const { idNota:_id } = req.body;
 
     try {
         
         let conn = obtenerConexion(req.body.conexion);
         let Nota = obtenerModelo('Nota', NotaSchema, conn);
-        const notas = await Nota.find({ idUsuario });
+        const notas = await Nota.find({ _id });
+
         res.status(200).json({
             ok: true,
             notas
         });
 
+
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             ok: false,
             msg: 'Error en el Servidor'
@@ -26,26 +28,15 @@ const getNotas = async ( req, res = response ) => {
     }
 }
 
-const createNota =  async ( req, res = response ) => {
+const createNota = async ( req, res = response ) => {
 
     let conn = obtenerConexion(req.body.conexion);
     let Nota = obtenerModelo('Nota', NotaSchema, conn);
 
     const nota = new Nota( req.body );
 
-    const { idAsignatura } = req.body;
-
     try {
         
-        const asignatura = await Asignatura.findById( idAsignatura );
-
-        if ( !asignatura ) {
-            return res.status(401).json({
-                ok: false,
-                msg: 'La asignatura no existe'
-            })
-        }
-
         const notaSaved = await nota.save();
 
         res.status(201).json({
@@ -70,7 +61,7 @@ const updateNota = async ( req, res = response ) => {
     let Nota = obtenerModelo('Nota', NotaSchema, conn);
 
     try {
-        
+
         const nota = await Nota.findById( notaID );
 
         if (!nota) {
@@ -79,12 +70,12 @@ const updateNota = async ( req, res = response ) => {
                 msg: 'La nota no existe por ese id'
             })
         }
-
+        
         const nuevaNota = {
             ...req.body
         }
 
-        const notaUpdated = await Nota.findByIdAndUpdate( notaID, nuevaNota, { new: true } )
+        const notaUpdated = await Nota.findByIdAndUpdate( notaID, nuevaNota, { new: true } );
 
         res.json({
             ok: true,
@@ -108,7 +99,7 @@ const deleteNota = async ( req, res = response ) => {
     let Nota = obtenerModelo('Nota', NotaSchema, conn);
 
     try {
-        
+
         const nota = await Nota.findById( notaID );
 
         if (!nota) {
