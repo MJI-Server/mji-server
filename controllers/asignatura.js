@@ -1,7 +1,7 @@
 const { response } = require('express');
 const Asignatura = require('../models/asignatura');
 const Curso = require('../models/curso');
-
+//Probando automate
 
 const getAsignaturas = async ( req, res =  response ) => {
     
