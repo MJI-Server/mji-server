@@ -17,7 +17,7 @@ const router = Router();
 router.post('/get', [
     check('idUsuario', 'El id del usuario no es válido').isMongoId(),
     validarJWT,
-    validarRoles('ADMINISTRADOR')
+    validarRoles('ADMINISTRADOR', 'DOCENTE'),
 ], getCursosProfesor);
 
 router.post('/', [
