@@ -7,7 +7,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 const validarCampos = require('../middlewares/validarcampos');
 
-const { crearAsignatura, actulizarAsignatura, eliminarAsignatura, getAsignaturas } = require('../controllers/asignatura');
+const { crearAsignatura, actulizarAsignatura, eliminarAsignatura, getAsignaturas, getAsignatura } = require('../controllers/asignatura');
 const validarJWT = require('../middlewares/validarjwt');
 const validarRoles = require('../middlewares/validar-rol');
 
@@ -16,6 +16,11 @@ const router = Router();
 router.post('/get', [
     validarJWT
 ], getAsignaturas);
+router.post('/getAsignatura/:id', [
+    validarJWT,
+    validarRoles('ADMINISTRADOR','DOCENTE'),
+    validarCampos
+], getAsignatura);
 router.post('/', [
     check('grado', 'El id del curso no es válido').not().isEmpty(),
     check('asignatura','La asignatura es requerida').not().isEmpty(),

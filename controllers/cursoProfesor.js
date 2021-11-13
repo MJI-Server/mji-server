@@ -14,7 +14,7 @@ const getCursosProfesor = async ( req, res = response ) => {
         let conn = obtenerConexion(req.body.conexion);
         let CursoProfesor = obtenerModelo('CursoProfesor', cursoProfesorSchema, conn );
 
-        const cursoProfesor = await CursoProfesor.find({ idUsuario }).populate({ path: 'idCurso', model: Curso, select: 'letra grado curso'}).populate({path: 'idAsignatura', model: Asignatura, select: 'codAsignatura grado asignatura'});
+        const cursoProfesor = await CursoProfesor.find({ idUsuario }).populate({ path: 'idCurso', model: Curso, select: 'letra grado curso'}).populate({path: 'idAsignatura', model: Asignatura, select: 'codAsignatura grado asignatura idCurso'});
         console.log(cursoProfesor);
 
         res.status(200).json({

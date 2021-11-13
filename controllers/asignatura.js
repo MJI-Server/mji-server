@@ -24,6 +24,33 @@ const getAsignaturas = async ( req, res =  response ) => {
     }
 
 }
+const getAsignatura = async ( req, res =  response ) => {
+    
+    
+    try {
+        const {id} = req.params;
+        const asignatura = await Asignatura.findById(id).populate({path:'unidades', populate:{path:'oas'}});
+        if(!asignatura){{
+            return res.status(404).json({
+                ok:false,
+                msg:'La asignatura no existe por ese id'
+            });
+        }}
+        res.status(200).json({
+            ok : true,
+            asignatura
+        });
+
+    } catch (error) {
+        
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador'
+        });
+
+    }
+
+}
 
 const crearAsignatura = async ( req, res = response ) => {
     const {grado,asignatura:nombre} = req.body;
@@ -149,6 +176,7 @@ const eliminarAsignatura = async ( req, res = response ) => {
 
 module.exports = {
     getAsignaturas,
+    getAsignatura,
     crearAsignatura,
     actulizarAsignatura,
     eliminarAsignatura

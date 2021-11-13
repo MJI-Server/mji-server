@@ -32,21 +32,21 @@ router.post('/:idColegio/:idCurso/:idAsignatura/:idUnidad',[
     unidadExist,
     validarArchivo,
     validarJWT,
-    // validarRoles('ADMINISTRADOR'),
+    validarRoles('ADMINISTRADOR','DOCENTE'),
     validarCampos,
 ], crearMaterial);
 
 router.put('/:id', [
     validarJWT,
     validarArchivo,
-    validarRoles('ADMINISTRADOR'),
+    validarRoles('ADMINISTRADOR','DOCENTE'),
     validarCampos,
 ], actualizarMaterial);
 
 router.delete('/:id',[
     check('id','El id no es valido').isMongoId(),
     validarJWT,
-    validarRoles('ADMINISTRADOR'),
+    validarRoles('ADMINISTRADOR','DOCENTE'),
     validarCampos,
 ], eliminarMaterial);
 
