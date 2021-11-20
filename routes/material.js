@@ -25,13 +25,13 @@ router.post('/:idAsignatura/:idCurso',[
 ], getMateriales);
 router.get('/:conexion/:id',[
 ], mostrarMaterial);
-router.post('/:idColegio/:idCurso/:idAsignatura/:idUnidad',[
+router.post('/:idCurso/:idAsignatura/:idUnidad',[
+    validarJWT,
     cursoExist,
     asignaturaExist,
     colegioExist,
     unidadExist,
     validarArchivo,
-    validarJWT,
     validarRoles('ADMINISTRADOR','DOCENTE'),
     validarCampos,
 ], crearMaterial);

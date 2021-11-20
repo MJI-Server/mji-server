@@ -15,9 +15,9 @@ const crearMaterial = async ( req, res = response ) => {
 
     
     try {
-        const {idUnidad,idCurso,idAsignatura,idColegio} = req.params;
+        const {idUnidad,idCurso,idAsignatura} = req.params;
+        const {colegio,curso,asignatura,unidad,idColegio} = req;
         const {conexion} = req.body;
-        const {colegio,curso,asignatura,unidad} = req;
         
         const carpeta = `${colegio}/${curso}/${asignatura}/${unidad.split(':')[0]}`;
         const nombre = await subirArchivo(req.files,undefined,carpeta);
