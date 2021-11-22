@@ -4,6 +4,8 @@ const obtenerModelo = require("../db/modelos");
 const cursoProfesorSchema = require('../models/cursoProfesor');
 const Curso = require('../models/curso');
 const Asignatura = require('../models/asignatura');
+const UsuarioSchema = require('../models/usuario');
+const pruebaSchema = require('../models/prueba');
 
 const getCursosProfesor = async ( req, res = response ) => {
 
@@ -15,7 +17,6 @@ const getCursosProfesor = async ( req, res = response ) => {
         let CursoProfesor = obtenerModelo('CursoProfesor', cursoProfesorSchema, conn );
 
         const cursoProfesor = await CursoProfesor.find({ idUsuario }).populate({ path: 'idCurso', model: Curso, select: 'letra grado curso'}).populate({path: 'idAsignatura', model: Asignatura, select: 'codAsignatura grado asignatura idCurso'});
-        console.log(cursoProfesor);
 
         res.status(200).json({
             ok: true,
@@ -30,6 +31,57 @@ const getCursosProfesor = async ( req, res = response ) => {
         })   
     }
 
+}
+
+const getUsuariosProfesor = async ( req, res = response ) => {
+
+    const { idCurso } = req.body;
+    
+    try {
+
+        let conn = obtenerConexion(req.body.conexion);
+        let UsuarioProfesor = obtenerModelo('Usuario', UsuarioSchema, conn );
+
+        const usuariosProfesor = await UsuarioProfesor.find({ idCurso });
+
+        res.status(200).json({
+            ok: true,
+            usuariosProfesor
+        });
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Error en el Servidor'
+        })   
+    }
+
+}
+
+const getPruebasProfesor = async(req, res = response)=>{
+    
+    const {idCurso,idAsignatura} = req.body;
+
+    try {
+
+        let conn = obtenerConexion(req.body.conexion);
+        let Prueba = obtenerModelo('Prueba', pruebaSchema, conn);
+        const pruebasProfesor = await Prueba.find({idCurso,idAsignatura});
+    
+        res.status(200).json({
+            ok:true,
+            pruebasProfesor
+        });
+
+ 
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            ok:false,
+            msg:'Hable con el administrador'
+        })
+    }
 }
 
 const createCursoProfesor = async ( req, res = response ) => {
@@ -156,6 +208,8 @@ const deleteCursoProfesor = async ( req, res = response ) => {
 
 module.exports = {
     getCursosProfesor,
+    getUsuariosProfesor,
+    getPruebasProfesor,
     createCursoProfesor,
     updateCursoProfesor,
     deleteCursoProfesor
