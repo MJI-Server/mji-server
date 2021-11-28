@@ -1,4 +1,4 @@
-const {model, Schema} = require('mongoose');
+const {Schema} = require('mongoose');
 
 const EnunciadoSchema = new Schema({
     idTarea : {
@@ -26,4 +26,4 @@ EnunciadoSchema.method('toJSON', function(){
     return object;
 })
 
-module.exports = model('Enunciado', EnunciadoSchema);
+module.exports = EnunciadoSchema;

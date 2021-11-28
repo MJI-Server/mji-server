@@ -1,4 +1,4 @@
-
+const EnunciadoSchema = require('../models/enunciado');
 const { response } = require("express");
 const obtenerConexion = require("../db/conexiones");
 const obtenerModelo = require("../db/modelos");
@@ -13,13 +13,15 @@ const getTareas = async ( req, res = response ) => {
 
         let conn = obtenerConexion(req.body.conexion);
         let Tarea = obtenerModelo('Tarea', TareaSchema, conn);
-        const tareas = await Tarea.find({idAsignatura}).populate({path:'enunciados', populate:{path:'items'}});
+        let Enunciado = obtenerModelo('Enunciado', EnunciadoSchema, conn);
+        const tareas = await Tarea.find({idAsignatura}).populate({path:'enunciados',model:Enunciado, populate:{path:'items'}});
         res.status(200).json({
             ok: true,
             tareas
         });
 
     } catch (error) {
+        console.log(error)
         res.status(500).json({
             ok: false,
             msg: 'Error en el Servidor'

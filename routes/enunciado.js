@@ -11,9 +11,6 @@ const validarJWT = require('../middlewares/validarjwt');
 
 const router = Router();
 
-router.post('/get', [
-    validarJWT
-], getEnunciados);
 
 router.post('/', [
     check('idTarea', 'El id no es válido').isMongoId(),

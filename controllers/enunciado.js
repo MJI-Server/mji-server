@@ -1,35 +1,20 @@
-const Enunciado = require('../models/enunciado');
-const Tarea = require('../models/tarea');
+const EnunciadoSchema = require('../models/enunciado');
+const TareaSchema = require('../models/tarea');
 const { response } = require('express');
-
-const getEnunciados = async ( req, res = response ) => {
-    try {
-        
-        const enunciados = await Enunciado.find();
-        res.status(200).json({
-            ok: true,
-            enunciados
-        })
-
-    } catch (error) {
-        
-        res.status(500).json({
-            ok: false,
-            msg: 'Error del servidor'
-        })
-
-    }
-}
+const obtenerConexion = require("../db/conexiones");
+const obtenerModelo = require("../db/modelos");
 
 const createEnunciado = async ( req, res = response ) => {
 
-    const enunciado = new Enunciado( req.body )
     const { idTarea } = req.body;
-
+    
     try {
-        
+        let conn = obtenerConexion(req.body.conexion);
+        let Tarea = obtenerModelo('Tarea', TareaSchema, conn);
+        let Enunciado = obtenerModelo('Enunciado', EnunciadoSchema, conn);
         const tarea = await Tarea.findById( idTarea );
-
+        
+        const enunciado = new Enunciado( req.body )
         if( !tarea ){
             return res.status(401).json({
                 ok: false,
@@ -128,7 +113,6 @@ const deleteEnunciado = async ( req, res = response ) => {
 }
 
 module.exports = {
-    getEnunciados,
     createEnunciado,
     updateEnunciado,
     deleteEnunciado

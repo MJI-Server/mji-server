@@ -27,7 +27,7 @@ const TareaSchema = new Schema({
     enunciados: [{
         type: Schema.Types.ObjectId,
         ref: 'Enunciado',
-        required: true
+        required: false
     }],
     dateInit: {
         type: Date,
