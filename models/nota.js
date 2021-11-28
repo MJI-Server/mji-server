@@ -6,6 +6,11 @@ const NotaSchema = new Schema({
         ref: 'Usuario',
         required: true
     },
+    idAsignatura:{
+        type: Schema.Types.ObjectId,
+        ref: 'Asignatura',
+        required: true
+    },
     descripcion: {
         type: String,
         required: true

@@ -27,7 +27,7 @@ router.post('/getUsuarios', [
 ], getUsuariosProfesor);
 
 router.post('/getPruebas', [
-    check('idCurso', 'El id del curso no es válido').isMongoId(),
+    check('idUsuario', 'El id del usuario no es válido').isMongoId(),
     check('idAsignatura', 'El id de la asignatura no es válido').isMongoId(),
     validarJWT,
     validarRoles('ADMINISTRADOR', 'DOCENTE'),

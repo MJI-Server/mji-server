@@ -44,15 +44,23 @@ const createNotaAlumno =  async ( req, res = response ) => {
     
     const nota_alumno = new Nota_Alumno( req.body );
 
-    const { idAsignatura } = req.body;
-
-    const { idNota } = req.body;
+    const { idAsignatura, idNota, idUsuario } = req.body;
 
     try {
         
         const asignatura = await Asignatura.findById( idAsignatura );
 
         const nota = await Nota.findById( idNota );
+        
+        const newNotaAlumno = await Nota_Alumno.findOne({ idNota, idUsuario });
+
+        if ( newNotaAlumno ) {
+            await Nota_Alumno.findByIdAndUpdate( newNotaAlumno._id, req.body, { new: true } )
+            return res.status(200).json({
+                ok: true,
+                msg: 'Nota del Alumno Actualizada'
+            })
+        }
 
         if ( !asignatura ) {
             return res.status(401).json({

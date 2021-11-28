@@ -11,11 +11,11 @@ const cursoProfesorSchema = new Schema ({
         ref: 'Curso',
         required: true
     },
-    idAsignatura: {
+    idAsignatura: [{
         type: Schema.Types.ObjectId,
         ref: 'Asignatura',
         required: true
-    },
+    }],
     status: {
         type: Boolean,
         default: true

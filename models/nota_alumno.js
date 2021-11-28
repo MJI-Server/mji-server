@@ -27,7 +27,7 @@ const Nota_AlumnoSchema = new Schema({
     },
     fecha: {
         type: Date,
-        // required: true
+        required: false
     },
     status: {
         type: Boolean,

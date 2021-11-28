@@ -5,14 +5,14 @@ const cursoProfesorSchema = require('../models/cursoProfesor');
 const Curso = require('../models/curso');
 const Asignatura = require('../models/asignatura');
 const UsuarioSchema = require('../models/usuario');
-const pruebaSchema = require('../models/prueba');
+const NotaSchema = require('../models/nota');
 
 const getCursosProfesor = async ( req, res = response ) => {
 
     const { idUsuario } = req.body;
     
     try {
-
+        
         let conn = obtenerConexion(req.body.conexion);
         let CursoProfesor = obtenerModelo('CursoProfesor', cursoProfesorSchema, conn );
 
@@ -61,17 +61,18 @@ const getUsuariosProfesor = async ( req, res = response ) => {
 
 const getPruebasProfesor = async(req, res = response)=>{
     
-    const {idCurso,idAsignatura} = req.body;
+    const {idUsuario,idAsignatura} = req.body;
 
     try {
 
         let conn = obtenerConexion(req.body.conexion);
-        let Prueba = obtenerModelo('Prueba', pruebaSchema, conn);
-        const pruebasProfesor = await Prueba.find({idCurso,idAsignatura});
+        let Nota = obtenerModelo('Nota', NotaSchema, conn);
+        const pruebasProfesor = await Nota.find({idUsuario,idAsignatura});
     
         res.status(200).json({
             ok:true,
-            pruebasProfesor
+            pruebasProfesor,
+            // NotasAlumno
         });
 
  
@@ -88,7 +89,8 @@ const createCursoProfesor = async ( req, res = response ) => {
 
     let conn = obtenerConexion(req.body.conexion);
     let CursoProfesor = obtenerModelo( 'CursoProfesor', cursoProfesorSchema, conn );
-
+    // Validar que no haya redundancia en la relación del docente con el curso 
+    //cursoProfesor.findOne({idUsuario, idCurso}) Si hay un registro entonces no debe dejar crearlo
     const cursoProfesor = new CursoProfesor(req.body);
 
     const { idAsignatura, idCurso } = req.body;
@@ -98,6 +100,7 @@ const createCursoProfesor = async ( req, res = response ) => {
 
         const asignatura = await Asignatura.findById( idAsignatura );
         const curso = await Curso.findById( idCurso );
+        const isExistCursoProfesor = await cursoProfesor.findOne({idUsuario, idCurso});
 
         if ( !asignatura ) {
             return res.status(401).json({
@@ -110,6 +113,13 @@ const createCursoProfesor = async ( req, res = response ) => {
             return res.status(401).json({
                 ok: false,
                 msg: 'El curso no existe'
+            })
+        }
+
+        if ( isExistCursoProfesor ) {
+            return res.status(401).json({
+                ok: false,
+                msg: 'Este curso ya ha sido asignado al docente'
             })
         }
 
