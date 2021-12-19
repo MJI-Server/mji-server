@@ -1,7 +1,8 @@
-const Item = require('../models/item');
-const Enunciado = require('../models/enunciado');
+const ItemSchema = require('../models/item');
+const EnunciadoSchema = require('../models/enunciado');
 const { response } = require('express');
-
+const obtenerConexion = require("../db/conexiones");
+const obtenerModelo = require("../db/modelos");
 const getItems = async ( req, res = response ) => {
     
     try {
@@ -23,10 +24,13 @@ const getItems = async ( req, res = response ) => {
 
 const createItem = async ( req, res = response ) => {
 
-    const item = new Item( req.body );
     const { idEnunciado } = req.body;
     
-    try {
+    try { 
+        let conn = obtenerConexion(req.body.conexion);
+        let Enunciado = obtenerModelo('Enunciado', EnunciadoSchema, conn);
+        let Item = obtenerModelo('Item', ItemSchema, conn);
+        const item = new Item( req.body );
         
         const enunciado = await Enunciado.findById( idEnunciado );
         if ( !enunciado ) {
