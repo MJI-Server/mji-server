@@ -6,6 +6,7 @@ const Curso = require('../models/curso');
 const Asignatura = require('../models/asignatura');
 const UsuarioSchema = require('../models/usuario');
 const NotaSchema = require('../models/nota');
+const Nota_AlumnoSchema = require('../models/nota_alumno');
 
 const getCursosProfesor = async ( req, res = response ) => {
 
@@ -71,8 +72,32 @@ const getPruebasProfesor = async(req, res = response)=>{
     
         res.status(200).json({
             ok:true,
-            pruebasProfesor,
-            // NotasAlumno
+            pruebasProfesor
+        });
+
+ 
+    } catch (error) {
+        console.log(error)
+        res.status(400).json({
+            ok:false,
+            msg:'Hable con el administrador'
+        })
+    }
+}
+
+const getNotasProfesor = async(req, res = response)=>{
+    
+    const {idCurso, idAsignatura, idNota} = req.body;
+
+    try {
+
+        let conn = obtenerConexion(req.body.conexion);
+        let Nota_Alumno = obtenerModelo('Nota_Alumno', Nota_AlumnoSchema, conn);
+        const NotasAlumnoProfesor = await Nota_Alumno.find({idCurso, idAsignatura, idNota});
+    
+        res.status(200).json({
+            ok:true,
+            NotasAlumnoProfesor
         });
 
  
@@ -220,6 +245,7 @@ module.exports = {
     getCursosProfesor,
     getUsuariosProfesor,
     getPruebasProfesor,
+    getNotasProfesor,
     createCursoProfesor,
     updateCursoProfesor,
     deleteCursoProfesor
