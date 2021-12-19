@@ -3,24 +3,7 @@ const EnunciadoSchema = require('../models/enunciado');
 const { response } = require('express');
 const obtenerConexion = require("../db/conexiones");
 const obtenerModelo = require("../db/modelos");
-const getItems = async ( req, res = response ) => {
-    
-    try {
-        
-        const items = await Item.find();
 
-        res.status(200).json({
-            ok: true,
-            items
-        })
-
-    } catch (error) {
-        res.status(500).json({
-            ok: false,
-            msg: 'Error del servidor'
-        });
-    }
-}
 
 const createItem = async ( req, res = response ) => {
 
@@ -63,7 +46,8 @@ const updateItem = async ( req, res = response ) => {
     const itemID = req.params.id;
     
     try {
-        
+        let conn = obtenerConexion(req.body.conexion);
+        let Item = obtenerModelo('Item', ItemSchema, conn);
         const item = await Item.findById( itemID );
 
         if ( !item ) {
@@ -98,6 +82,8 @@ const deleteItem = async ( req, res = response ) => {
     const itemID = req.params.id;
 
     try {
+        let conn = obtenerConexion(req.body.conexion);
+        let Item = obtenerModelo('Item', ItemSchema, conn);
         
         const item = await Item.findById( itemID );
 
@@ -108,13 +94,12 @@ const deleteItem = async ( req, res = response ) => {
             });
         }
 
-        item.status = !item.status;
+        ;
         
-        await item.save();
+        await Item.findByIdAndDelete(itemID);
 
         res.status(200).json({
             ok: true,
-            item
         })
 
     } catch (error) {
@@ -127,7 +112,6 @@ const deleteItem = async ( req, res = response ) => {
 }
 
 module.exports = {
-    getItems,
     createItem,
     updateItem,
     deleteItem

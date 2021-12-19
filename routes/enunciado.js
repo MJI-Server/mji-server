@@ -5,7 +5,7 @@
 */
 const {Router} = require('express');
 const { check } = require('express-validator');
-const { getEnunciados, createEnunciado, updateEnunciado, deleteEnunciado } = require('../controllers/enunciado');
+const { createEnunciado, updateEnunciado, deleteEnunciado } = require('../controllers/enunciado');
 const validarCampos = require('../middlewares/validarcampos');
 const validarJWT = require('../middlewares/validarjwt');
 

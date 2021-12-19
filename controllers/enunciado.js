@@ -82,6 +82,8 @@ const deleteEnunciado = async ( req, res = response ) => {
     const enunciadoID = req.params.id;
 
     try {
+        let conn = obtenerConexion(req.body.conexion);
+        let Enunciado = obtenerModelo('Enunciado', EnunciadoSchema, conn);
         
         const enunciado = await Enunciado.findById( enunciadoID );
 
@@ -92,13 +94,11 @@ const deleteEnunciado = async ( req, res = response ) => {
             });
         }
 
-        enunciado.status = !enunciado.status;
 
-        await enunciado.save();
+        await Enunciado.findByIdAndDelete(enunciadoID);
 
         res.status(200).json({
-            ok: true,
-            enunciado
+            ok: true
         })
 
     } catch (error) {

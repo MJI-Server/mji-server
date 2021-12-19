@@ -11,9 +11,6 @@ const validarJWT = require('../middlewares/validarjwt');
 
 const router = Router();
 
-router.post('/get', [
-    validarJWT
-], getItems);
 
 router.post('/', [
     check('idEnunciado', 'El id del enunciado no es válido').isMongoId(),
@@ -23,7 +20,6 @@ router.post('/', [
 ], createItem);
 
 router.put('/:id', [
-    check('idEnunciado', 'El id del enunciado no es válido').isMongoId(),
     check('item', 'el item es requerido').not().isEmpty(),
     check('id', 'El id no es válido').isMongoId(),
     validarJWT, 
