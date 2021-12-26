@@ -37,12 +37,15 @@ const getAsistencia = async(req,res=response)=>{
 const newAsistencia = async(req,res=response)=>{
   
         try {
-            const {id} = req.params;
+            const {id:idUsuario} = req.params;
             const {conexion} = req.body; 
             let conn = obtenerConexion(conexion);
             let Usuario = obtenerModelo('Usuario', UsuarioSchema, conn);
             let Asistencia = obtenerModelo('Asistencia', AsistenciaSchema, conn);
-            const usuario = await Usuario.findById(id);
+            const usuario = await Usuario.findById(idUsuario);
+
+            const fecha = req.body.fecha;
+
             if(!usuario){
                 return res.status(400).json({
                     ok:false,
@@ -50,10 +53,9 @@ const newAsistencia = async(req,res=response)=>{
                 })
             }
             const asistencia = new Asistencia({
-                idUsuario:id,
+                idUsuario,
                 idCurso:usuario.idCurso,
-                idColegio:usuario.idColegio,
-                fecha:req.body.fecha,
+                fecha,
                 year:req.body.year,
                 asistencia:req.body.asistencia,
             });

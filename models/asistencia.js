@@ -11,11 +11,6 @@ const AsistenciaSchema = Schema({
         ref:'Curso',
         required:true
     },
-    idColegio:{
-        type:Schema.Types.ObjectId,
-        ref:'Colegio',
-        required:true
-    },
     fecha: {
         type: Date,
         required:true
