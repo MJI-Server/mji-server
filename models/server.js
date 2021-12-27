@@ -31,6 +31,7 @@ class Server {
         this.pruebaAlumno = '/api/pruebaAlumno';
         this.horario = '/api/horario';
         this.bloque = '/api/bloque';
+        this.asistenciaProfesor = '/api/asistenciaProfesor';
         dbConection();
     }
 
@@ -76,7 +77,7 @@ class Server {
         this.app.use(this.pruebaAlumno,require('../routes/prueba_alumno'));
         this.app.use(this.horario,require('../routes/horario'));
         this.app.use(this.bloque,require('../routes/bloque'));
-        
+        this.app.use(this.asistenciaProfesor,require('../routes/asistenciaProfesor'));  
        
     }
 
