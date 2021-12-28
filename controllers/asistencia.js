@@ -34,6 +34,35 @@ const getAsistencia = async(req,res=response)=>{
         }
     
 }
+
+const getAsistenciaAlumnos = async(req,res=response)=>{
+  
+    try { 
+            const {conexion, idCurso, fecha} = req.body; 
+            let conn = obtenerConexion(conexion);
+            let Asistencia = obtenerModelo('Asistencia', AsistenciaSchema, conn);
+            const date = fecha.split('T')[0];
+            const asistencia = await Asistencia.find({idCurso, date});
+            if(!asistencia){
+                return res.status(400).json({
+                    ok:false,
+                    msg:'No existen registros de asistencia'
+                })
+            }
+            res.status(200).json({
+                ok:true,
+                asistencia,
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({
+                ok:false,
+                msg:'Error del servidor'
+            });
+        }
+    
+}
+
 const newAsistencia = async(req,res=response)=>{
   
         try {
@@ -46,16 +75,36 @@ const newAsistencia = async(req,res=response)=>{
 
             const fecha = req.body.fecha;
 
+            const idCurso = req.body.idCurso;
+
+            const date = fecha.split('T')[0];
+
+            const asistenciaAlumno = await Asistencia.findOne({idUsuario, idCurso, date})
+
+            if ( asistenciaAlumno ) {
+                
+                await Asistencia.findByIdAndUpdate( asistenciaAlumno._id, req.body, { new: true } )
+
+                const asistUpdated = await Asistencia.findOne({idUsuario, idCurso, date})
+                return res.status(200).json({
+                    ok: true,
+                    asistencia: asistUpdated,
+                    msg: 'La asistencia del Alumno Actualizada'
+                })
+            }
+
             if(!usuario){
                 return res.status(400).json({
                     ok:false,
                     msg:'El usuario no existe'
                 })
             }
+
             const asistencia = new Asistencia({
                 idUsuario,
-                idCurso:usuario.idCurso,
+                idCurso,
                 fecha,
+                date,
                 year:req.body.year,
                 asistencia:req.body.asistencia,
             });
@@ -109,5 +158,6 @@ const changeAsistencia = async(req,res=response)=>{
 module.exports = {
     newAsistencia,
     changeAsistencia,
-    getAsistencia
+    getAsistencia,
+    getAsistenciaAlumnos,
 }

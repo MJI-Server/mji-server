@@ -15,6 +15,10 @@ const AsistenciaSchema = Schema({
         type: Date,
         required:true
     },
+    date: {
+        type: String,
+        required: true
+    },
     year: {
         type: Number,
         required:true
