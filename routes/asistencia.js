@@ -9,8 +9,6 @@ const { newAsistencia, changeAsistencia, getAsistencia, getAsistenciaAlumnos } =
 const { cursoExist, colegioExist } = require('../custom/custom-rol');
 const validarRoles = require('../middlewares/validar-rol');
 const validarCampos = require('../middlewares/validarcampos');
-const validarJWT = require('../middlewares/validarjwt');
-
 
 const router = Router();
 
@@ -31,13 +29,6 @@ router.post('/:id',[
     // check('fecha','La fecha es requerida').isDate(),
     validarCampos
 ], newAsistencia);
-
-router.delete('/:id',[
-    check('id','El id no es valido').isMongoId(),
-    validarJWT,
-    validarRoles('ADMINISTRADOR'),
-    validarCampos
-], changeAsistencia);
 
 
 module.exports = router;
