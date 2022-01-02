@@ -5,7 +5,6 @@
 */
 const { createServer, getStream, deleteStream } = require("../controllers/stream");
 const { Router } = require('express');
-const { check } = require('express-validator');
 const validarCampos = require('../middlewares/validarcampos');
 
 const validarJWT = require('../middlewares/validarjwt');

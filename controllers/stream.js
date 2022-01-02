@@ -60,26 +60,11 @@ const createServer =async (req, res = response )=>{
         })
     }
 }
-const joinStream =async (req, res = response )=>{
-    try {
-        const {nombre}=req.usuario;
-      let attendeeUrl = api.administration.join(nombre, '1', 'secret')
-      res.json({
-          ok:true,
-          url:attendeeUrl
-      })
-    } catch (error) {
-        console.log(error)
-        res.json({
-            ok:false
-        })
-    }
-}
+
 const getStream =async (req, res = response )=>{
     try {
       const {idCurso}=req.body;
       const {role,nombre,_id}=req.usuario;
-
 
 
       let conn = obtenerConexion(req.body.conexion);
@@ -144,6 +129,5 @@ const deleteStream =async (req, res = response )=>{
 module.exports={
     createServer,
     getStream,
-    joinStream,
     deleteStream
 }
