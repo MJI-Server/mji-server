@@ -3,7 +3,7 @@
 /api/stream
 ****************
 */
-const { createServer } = require("../controllers/stream");
+const { createServer, getStream, deleteStream } = require("../controllers/stream");
 const { Router } = require('express');
 const { check } = require('express-validator');
 const validarCampos = require('../middlewares/validarcampos');
@@ -21,6 +21,17 @@ router.post('/',[
     validarRoles('DOCENTE','ADMINISTRADOR'),
     validarCampos
 ], createServer);
+
+router.post('/getStream',[
+    validarJWT,
+    validarCampos
+], getStream);
+
+router.delete('/',[
+    validarJWT,
+    validarRoles('DOCENTE','ADMINISTRADOR'),
+    validarCampos
+], deleteStream);
 
 
 module.exports = router;
