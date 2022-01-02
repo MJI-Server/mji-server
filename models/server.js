@@ -32,6 +32,7 @@ class Server {
         this.horario = '/api/horario';
         this.bloque = '/api/bloque';
         this.stream = '/api/stream';
+        this.asistenciaProfesor = '/api/asistenciaProfesor';
         dbConection();
     }
 
@@ -78,7 +79,7 @@ class Server {
         this.app.use(this.horario,require('../routes/horario'));
         this.app.use(this.bloque,require('../routes/bloque'));
         this.app.use(this.stream,require('../routes/stream'));
-        
+        this.app.use(this.asistenciaProfesor,require('../routes/asistenciaProfesor'));  
        
     }
 

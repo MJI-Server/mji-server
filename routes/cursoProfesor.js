@@ -8,7 +8,7 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 const validarCampos = require('../middlewares/validarcampos');
 
-const { getCursosProfesor, createCursoProfesor, updateCursoProfesor, deleteCursoProfesor, getUsuariosProfesor, getPruebasProfesor } = require('../controllers/cursoProfesor');
+const { getCursosProfesor, createCursoProfesor, updateCursoProfesor, deleteCursoProfesor, getUsuariosProfesor, getPruebasProfesor, getNotasProfesor } = require('../controllers/cursoProfesor');
 const validarJWT = require('../middlewares/validarjwt');
 const validarRoles = require('../middlewares/validar-rol');
 
@@ -32,6 +32,14 @@ router.post('/getPruebas', [
     validarJWT,
     validarRoles('ADMINISTRADOR', 'DOCENTE'),
 ], getPruebasProfesor);
+
+router.post('/getNotas', [
+    check('idCurso', 'El id del curso no es válido').isMongoId(),
+    check('idAsignatura', 'El id de la asignatura no es válido').isMongoId(),
+    check('idNota', 'El id de la nota no es válido').isMongoId(),
+    validarJWT,
+    validarRoles('ADMINISTRADOR', 'DOCENTE'),
+], getNotasProfesor);
 
 router.post('/', [
     check('idUsuario', 'El id del usuario no es válido').isMongoId(),
